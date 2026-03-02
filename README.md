@@ -7,22 +7,44 @@ Data Engineer specializing in Apache Spark, Delta Lake, and Databricks on Azure.
 ## Development
 
 ```bash
-cd frontend
-yarn install
-yarn start       # http://localhost:3000
-yarn build       # production build
+cd site
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # production build to site/dist/
 ```
 
 ## Adding Content
 
-All content lives in `frontend/src/data/`:
+### New blog post
 
-- **Blog posts** → `blog.js` — add to the `blogPosts` array
-- **Projects** → `projects.js` — add to the `projects` array
-- **Certifications** → `certifications.js`
-- **Events** → `events.js`
-- **Resources** → `resources.js`
-- **About (skills/timeline)** → `about.js`
+Create `site/src/content/blog/your-post-slug.md`:
+
+```markdown
+---
+title: "Post Title"
+date: "March 2, 2026"
+readTime: "5 min read"
+excerpt: "Short description shown in listings."
+tags: ["Apache Spark", "Delta Lake"]
+---
+
+Your markdown content here...
+```
+
+### New project
+
+Create `site/src/content/projects/your-project-slug.md` with the same frontmatter pattern (replace `readTime` with `githubUrl` if applicable).
+
+### Other content
+
+Static data lives in `site/src/data/`:
+
+| File | Content |
+|------|---------|
+| `about.js` | Skills and timeline |
+| `certifications.js` | Certifications list |
+| `events.js` | Upcoming and past events |
+| `resources.js` | Curated resources |
 
 ## Deployment
 
