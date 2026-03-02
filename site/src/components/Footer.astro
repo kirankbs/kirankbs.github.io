@@ -1,0 +1,58 @@
+---
+import { Github, Linkedin, Mail } from 'lucide-react';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div class="col-span-1 md:col-span-2">
+        <div class="flex items-center space-x-2 mb-4">
+          <div class="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-xl">KK</span>
+          </div>
+          <span class="text-xl font-bold text-slate-900 dark:text-white">Kiran Kumar</span>
+        </div>
+        <p class="text-slate-600 dark:text-slate-400 text-sm max-w-md">
+          Data Engineer specializing in Apache Spark, Delta Lake, Databricks, and Lakehouse Architecture on Azure.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          {['/about', '/blog', '/projects', '/contact'].map(path => (
+            <li>
+              <a href={path} class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400 text-sm capitalize">
+                {path.replace('/', '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="font-semibold text-slate-900 dark:text-white mb-4">Connect</h3>
+        <div class="flex space-x-4">
+          <a href="https://github.com/kirankbs" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
+            class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400">
+            <Github className="w-5 h-5" />
+          </a>
+          <a href="https://www.linkedin.com/in/kirankbs/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+            class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400">
+            <Linkedin className="w-5 h-5" />
+          </a>
+          <a href="mailto:kiranprofessional2@gmail.com" aria-label="Email"
+            class="text-slate-600 dark:text-slate-400 hover:text-cyan-600 dark:hover:text-cyan-400">
+            <Mail className="w-5 h-5" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-8 border-t border-slate-200 dark:border-slate-800 text-center text-sm text-slate-600 dark:text-slate-400">
+      <p>&copy; {currentYear} Kiran Kumar. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

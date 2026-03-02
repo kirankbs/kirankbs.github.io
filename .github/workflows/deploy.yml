@@ -21,21 +21,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: frontend/yarn.lock
 
       - name: Install dependencies
-        working-directory: frontend
-        run: yarn install --frozen-lockfile
+        working-directory: site
+        run: npm install
 
       - name: Build
-        working-directory: frontend
-        run: yarn build
+        working-directory: site
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: frontend/build
+          path: site/dist
 
   deploy:
     needs: build

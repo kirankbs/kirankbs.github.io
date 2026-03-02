@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { certifications } from '../data/certifications.js';
+---
+
+<BaseLayout title="Certifications | Kiran Kumar" description="Professional Databricks certifications in data engineering, ML engineering, and generative AI.">
+  <div class="min-h-screen bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="mb-12">
+        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Certifications</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl">
+          Professional certifications validating expertise in data engineering, machine learning, and AI on Databricks.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {certifications.map((cert: any) => (
+          <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700">
+            <div class="flex items-start justify-between mb-4">
+              <div class="p-3 bg-cyan-50 dark:bg-cyan-950 rounded-lg">
+                <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+              </div>
+              <span class="text-sm text-slate-500 dark:text-slate-400">{cert.date}</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">{cert.title}</h3>
+            <p class="text-cyan-600 dark:text-cyan-400 font-medium mb-3">{cert.issuer}</p>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">{cert.description}</p>
+            {cert.link && (
+              <a href={cert.link} target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 text-sm font-medium">
+                Learn More &rarr;
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+---
+
+<BaseLayout title="Projects | Kiran Kumar" description="Data engineering architecture case studies and real-world implementations.">
+  <div class="min-h-screen bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="mb-12">
+        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Projects</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl">
+          Architecture case studies and real-world implementations of data platform solutions.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        {projects.map((project) => (
+          <article class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden hover:shadow-xl hover:border-cyan-300 dark:hover:border-cyan-700">
+            <div class="p-8">
+              <div class="flex items-start justify-between mb-4">
+                <div class="p-3 bg-cyan-50 dark:bg-cyan-950 rounded-lg">
+                  <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                </div>
+                <span class="text-sm text-slate-500 dark:text-slate-400">{project.data.date}</span>
+              </div>
+              <a href={`/projects/${project.slug}`}>
+                <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-cyan-600 dark:group-hover:text-cyan-400">
+                  {project.data.title}
+                </h2>
+              </a>
+              <p class="text-slate-600 dark:text-slate-400 mb-6">{project.data.excerpt}</p>
+              <div class="flex flex-wrap gap-2 mb-6">
+                {project.data.tags.map((tag) => (
+                  <span class="text-xs px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full">{tag}</span>
+                ))}
+              </div>
+              <a href={`/projects/${project.slug}`} class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium">
+                View Details &rarr;
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>

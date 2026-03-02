@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { resources } from '../data/resources.js';
+
+const categories = ['All', ...new Set(resources.map((r: any) => r.category))];
+---
+
+<BaseLayout title="Resources | Kiran Kumar" description="Curated guides, templates, and references for data engineering professionals.">
+  <div class="min-h-screen bg-white dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="mb-12">
+        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Resources</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl">
+          Curated collection of guides, templates, and references for data engineering professionals.
+        </p>
+      </div>
+
+      <div class="mb-8 flex flex-wrap gap-2" id="category-filters">
+        {categories.map((category: string) => (
+          <button
+            data-category={category}
+            class={`cat-btn px-4 py-2 rounded-lg text-sm font-medium ${category === 'All' ? 'bg-cyan-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="resources-grid">
+        {resources.map((resource: any) => (
+          <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700"
+            data-category={resource.category}
+          >
+            <div class="flex items-start justify-between mb-4">
+              <div class="p-3 bg-cyan-50 dark:bg-cyan-950 rounded-lg">
+                <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium rounded">{resource.type}</span>
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">{resource.title}</h3>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">{resource.description}</p>
+            <a href={resource.downloadLink} target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium text-sm">
+              {resource.type === 'External' ? 'Visit Resource' : 'Download'} &rarr;
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const buttons = document.querySelectorAll('.cat-btn');
+  const cards = document.querySelectorAll('#resources-grid [data-category]');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-category');
+      buttons.forEach(b => {
+        b.classList.remove('bg-cyan-600', 'text-white');
+        b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+      });
+      btn.classList.add('bg-cyan-600', 'text-white');
+      btn.classList.remove('bg-slate-100', 'text-slate-700');
+      cards.forEach(card => {
+        (card as HTMLElement).style.display = (cat === 'All' || card.getAttribute('data-category') === cat) ? '' : 'none';
+      });
+    });
+  });
+</script>

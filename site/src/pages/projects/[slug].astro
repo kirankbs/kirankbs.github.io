@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={`${project.data.title} | Kiran Kumar`} description={project.data.excerpt}>
+  <article class="min-h-screen bg-white dark:bg-slate-950">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <a href="/projects" class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 mb-8 font-medium">
+        &larr; Back to Projects
+      </a>
+
+      <header class="mb-8">
+        <div class="flex flex-wrap gap-2 mb-4">
+          {project.data.tags.map((tag) => (
+            <span class="text-xs px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full">{tag}</span>
+          ))}
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">{project.data.title}</h1>
+        <div class="flex items-center space-x-4 text-slate-600 dark:text-slate-400">
+          <span>{project.data.date}</span>
+          {project.data.githubUrl && (
+            <a href={project.data.githubUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center hover:text-cyan-600 dark:hover:text-cyan-400">
+              View on GitHub &rarr;
+            </a>
+          )}
+        </div>
+      </header>
+
+      <div class="prose prose-slate dark:prose-invert max-w-none">
+        <Content />
+      </div>
+
+      <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+        <a href="/projects" class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium">
+          &larr; More Projects
+        </a>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
