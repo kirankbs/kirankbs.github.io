@@ -1,27 +1,65 @@
 export const timeline = [
   {
-    year: '2024-Present',
+    year: 'Aug 2024 – Present',
+    role: 'Staff Developer',
+    company: 'CEDES · Berlin, Germany (Remote)',
+    description: 'Taking care of Data, ML Operations and Databricks Platform on Azure.',
+  },
+  {
+    year: 'Aug 2022 – Jul 2024',
+    role: 'Technical Lead',
+    company: 'relayr · Berlin, Germany',
+    description: 'Leading the development of an innovative IIoT solution: Equipment as a Service (EaaS), seamlessly connecting OEMs, customers, IoT platforms, and IFS FinOps ERP systems from inception to implementation.',
+  },
+  {
+    year: 'Jan 2021 – Oct 2022',
     role: 'Senior Data Engineer',
-    company: 'Tech Company',
-    description: 'Leading data platform modernization using Delta Lake and Databricks'
+    company: 'relayr · Berlin, Germany',
+    description: 'Expertly managed terabytes of data ingestion from Kafka into distributed PostgreSQL (Citus) and Azure Data Lake for analytics. Developed from scratch, including Grafana monitoring. Implemented sophisticated recovery solutions between hot and cold storage layers.',
   },
   {
-    year: '2022-2024',
-    role: 'Data Engineer',
-    company: 'Data Startup',
-    description: 'Built lakehouse architecture from scratch using Apache Spark'
+    year: 'Aug 2018 – Jan 2021',
+    role: 'Scala IoT Developer',
+    company: 'relayr · Berlin, Germany',
+    description: 'Engineered a robust solution to eliminate frequent downtime in critical IoT ingestion points, ensuring uninterrupted service with 99.999% availability. Led end-to-end development of an Enterprise HiveMQ MQTT-based system supporting 30,000 IoT devices, processing 15k messages per second.',
   },
   {
-    year: '2020-2022',
-    role: 'Junior Data Engineer',
-    company: 'Enterprise Corp',
-    description: 'Developed ETL pipelines and data governance frameworks'
+    year: 'Jul 2017 – Jul 2018',
+    role: 'Software Developer',
+    company: 'Springer Nature · Pune, India',
+    description: 'Migrated data from a 25-year-old SQL-based database to MongoDB for research content using Kafka Connect-based Change Data Capture. Implemented Kafka Connect and Akka Streams solutions for seamless data transition.',
+  },
+  {
+    year: 'Feb 2016 – Jun 2017',
+    role: 'System Analyst',
+    company: 'Bitwise Inc · Pune, India',
+    description: 'Led creation of the Hydrograph ETL tool from scratch using Eclipse SDK & RCP Plugin + GEF framework, integrated with Scala and Hadoop backend. Successfully completed PoC, design, development, and distribution.',
+  },
+  {
+    year: 'Jul 2015 – Feb 2016',
+    role: 'Program Analyst',
+    company: 'Bitwise Inc · Pune, India',
+    description: 'Key contributor to the Test Data Management web app built from scratch with OSGi Felix. Developed client-specific applications using IBM BPM.',
+  },
+  {
+    year: 'Jul 2014 – Jul 2015',
+    role: 'Software Engineer',
+    company: 'Tech Mahindra · Pune, India',
+    description: 'Successfully convinced both the team and department head to adopt the AngularJS framework for the ActiveVOS BPM tool, resulting in the implementation of a feature-rich frontend solution.',
+  },
+  {
+    year: 'Jun 2012 – Jun 2014',
+    role: 'Associate Software Engineer',
+    company: 'Tech Mahindra · Pune, India',
+    description: 'Independently learned the ActiveVOS BPM tool and swiftly integrated into the project, emerging as a key contributor to the overall solution.',
   },
 ];
 
 export const skills = [
-  { category: 'Data Processing', items: ['Apache Spark', 'PySpark', 'Spark SQL', 'Delta Lake'] },
-  { category: 'Platforms', items: ['Databricks', 'Azure'] },
-  { category: 'Architecture', items: ['Lakehouse', 'Medallion Architecture', 'Data Mesh', 'Data Governance'] },
-  { category: 'Languages', items: ['Python', 'SQL', 'Scala', 'Java'] },
+  { category: 'Data Platform', items: ['Apache Spark', 'Spark Structured Streaming', 'Delta Lake', 'Databricks', 'Unity Catalog', 'Azure Data Lake', 'MLOps'] },
+  { category: 'Streaming & Messaging', items: ['Apache Kafka', 'Kafka Connect', 'HiveMQ MQTT', 'Akka Streams'] },
+  { category: 'Cloud & Infrastructure', items: ['Azure', 'Azure Databricks', 'Azure Dashboards', 'Grafana'] },
+  { category: 'Languages', items: ['Scala', 'Python', 'SQL'] },
+  { category: 'Databases', items: ['PostgreSQL', 'MongoDB', 'ElasticSearch', 'Azure Data Explorer (ADX)'] },
+  { category: 'Architecture', items: ['Lakehouse', 'Medallion Architecture', 'IIoT', 'Data Governance'] },
 ];
