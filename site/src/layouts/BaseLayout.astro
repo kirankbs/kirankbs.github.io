@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer.astro';
+import { siteConfig } from '../site.config';
 
 interface Props {
   title?: string;
@@ -9,8 +10,8 @@ interface Props {
 }
 
 const {
-  title = 'Kiran Kumar | Data Engineer',
-  description = 'Data Engineer specializing in Apache Spark, Delta Lake, and Databricks on Azure.',
+  title = `${siteConfig.name} | ${siteConfig.title}`,
+  description = siteConfig.description,
 } = Astro.props;
 ---
 

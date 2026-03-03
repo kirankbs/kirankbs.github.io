@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../site.config';
 ---
 
 <BaseLayout title="Contact | Kiran Kumar" description="Get in touch with Kiran Kumar, Data Engineer.">
@@ -13,7 +14,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
 
       <div class="grid md:grid-cols-3 gap-6 mb-12">
-        <a href="mailto:kiranprofessional2@gmail.com"
+        <a href={`mailto:${siteConfig.email}`}
           class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700 text-center">
           <div class="inline-flex p-4 bg-cyan-50 dark:bg-cyan-950 rounded-full mb-4 group-hover:bg-cyan-100 dark:group-hover:bg-cyan-900">
             <svg class="w-8 h-8 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,10 +22,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </svg>
           </div>
           <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Email</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm">kiranprofessional2@gmail.com</p>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">{siteConfig.email}</p>
         </a>
 
-        <a href="https://www.linkedin.com/in/kirankbs/" target="_blank" rel="noopener noreferrer"
+        <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer"
           class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700 text-center">
           <div class="inline-flex p-4 bg-cyan-50 dark:bg-cyan-950 rounded-full mb-4 group-hover:bg-cyan-100 dark:group-hover:bg-cyan-900">
             <svg class="w-8 h-8 text-cyan-600 dark:text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
@@ -35,7 +36,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <p class="text-slate-600 dark:text-slate-400 text-sm">Connect on LinkedIn</p>
         </a>
 
-        <a href="https://github.com/kirankbs" target="_blank" rel="noopener noreferrer"
+        <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer"
           class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700 text-center">
           <div class="inline-flex p-4 bg-cyan-50 dark:bg-cyan-950 rounded-full mb-4 group-hover:bg-cyan-100 dark:group-hover:bg-cyan-900">
             <svg class="w-8 h-8 text-cyan-600 dark:text-cyan-400" fill="currentColor" viewBox="0 0 24 24">
@@ -52,7 +53,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p class="text-slate-600 dark:text-slate-400 mb-4">
           Feel free to reach out via email. I typically respond within 24–48 hours.
         </p>
-        <a href="mailto:kiranprofessional2@gmail.com"
+        <a href={`mailto:${siteConfig.email}`}
           class="inline-flex items-center px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg">
           Send Email &rarr;
         </a>

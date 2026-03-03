@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Sun, Moon, Menu, X } from 'lucide-react';
+import { siteConfig } from '../site.config';
 
 const navItems = [
   { path: '/', label: 'Home' },
@@ -46,10 +47,10 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           <a href="/" className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">KK</span>
+              <span className="text-white font-bold text-xl">{siteConfig.initials}</span>
             </div>
             <span className="text-xl font-bold text-slate-900 dark:text-white hidden sm:block">
-              Kiran Kumar
+              {siteConfig.name}
             </span>
           </a>
 
