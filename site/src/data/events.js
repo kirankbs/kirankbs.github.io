@@ -5,7 +5,7 @@ export const upcomingEvents = [
     location: 'Online',
     type: 'Workshop',
     description: 'Deep dive into building modern lakehouse architectures with Delta Lake and Databricks.',
-    registrationLink: '#'
+    registrationLink: null
   },
 ];
 
@@ -17,7 +17,7 @@ export const pastEvents = [
     type: 'Talk',
     description: 'Shared strategies for reducing data platform costs by 40% while maintaining performance.',
     videoLink: 'https://youtube.com',
-    slidesLink: '#'
+    slidesLink: null
   },
   {
     title: 'Building Scalable Data Pipelines with Apache Spark',
@@ -26,6 +26,6 @@ export const pastEvents = [
     type: 'Workshop',
     description: 'Hands-on workshop covering best practices for production Spark applications.',
     videoLink: 'https://youtube.com',
-    slidesLink: '#'
+    slidesLink: null
   },
 ];

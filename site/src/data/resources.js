@@ -3,14 +3,14 @@ export const resources = [
     title: 'Delta Lake Best Practices Guide',
     type: 'PDF',
     description: 'Comprehensive guide covering optimization techniques, table design, and performance tuning for Delta Lake.',
-    downloadLink: '#',
+    downloadLink: null,
     category: 'Guides'
   },
   {
     title: 'Spark Performance Tuning Cheatsheet',
     type: 'PDF',
     description: 'Quick reference for common Spark configuration parameters and optimization strategies.',
-    downloadLink: '#',
+    downloadLink: null,
     category: 'Cheatsheets'
   },
   {
@@ -24,14 +24,14 @@ export const resources = [
     title: 'Data Governance Framework Template',
     type: 'PDF',
     description: 'Template for implementing data governance policies in lakehouse architectures.',
-    downloadLink: '#',
+    downloadLink: null,
     category: 'Templates'
   },
   {
     title: 'Cost Optimization Strategies',
     type: 'PDF',
     description: 'Detailed strategies for reducing data platform costs while maintaining performance.',
-    downloadLink: '#',
+    downloadLink: null,
     category: 'Guides'
   },
   {
