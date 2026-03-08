@@ -22,4 +22,21 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, projects };
+const ebook = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    chapter: z.number(),
+    part: z.number().optional(),
+    partTitle: z.string().optional(),
+    status: z.enum(['draft', 'review', 'published']).default('draft'),
+    excerpt: z.string(),
+    estimatedReadTime: z.string().optional(),
+    lastUpdated: z.string(),
+    blogPostRef: z.string().optional(),
+    dataset: z.string().optional(),
+    learningObjectives: z.array(z.string()).optional(),
+  }),
+});
+
+export const collections = { blog, projects, ebook };

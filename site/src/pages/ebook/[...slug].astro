@@ -1,0 +1,44 @@
+---
+import EbookLayout from '../../layouts/EbookLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const chapters = await getCollection('ebook');
+  return chapters.map(chapter => ({
+    params: { slug: chapter.slug },
+    props: { chapter },
+  }));
+}
+
+const { chapter } = Astro.props;
+const { Content } = await render(chapter);
+const isDraft = chapter.data.status !== 'published';
+---
+
+<EbookLayout
+  title={chapter.data.title}
+  description={chapter.data.excerpt}
+  chapter={chapter.data.chapter}
+  part={chapter.data.part}
+  partTitle={chapter.data.partTitle}
+  lastUpdated={chapter.data.lastUpdated}
+  estimatedReadTime={chapter.data.estimatedReadTime}
+  blogPostRef={chapter.data.blogPostRef}
+  dataset={chapter.data.dataset}
+>
+  {isDraft ? (
+    <div class="py-16 text-center">
+      <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 mb-6">
+        Coming Soon
+      </div>
+      <p class="text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto mb-2">
+        This chapter is currently being written.
+      </p>
+      <p class="text-slate-500 dark:text-slate-500">
+        Subscribe to the <a href="https://newsletter.kirankbs.com/" class="text-cyan-600 dark:text-cyan-400 hover:underline">newsletter</a> to get notified when new chapters drop.
+      </p>
+    </div>
+  ) : (
+    <Content />
+  )}
+</EbookLayout>

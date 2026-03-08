@@ -1,0 +1,176 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { ebookConfig } from '../../data/ebook';
+import { BookOpen, Download, Github } from 'lucide-react';
+
+const chapters = (await getCollection('ebook')).sort(
+  (a, b) => a.data.chapter - b.data.chapter
+);
+
+const publishedCount = chapters.filter(c => c.data.status === 'published').length;
+const latestPublished = chapters
+  .filter(c => c.data.status === 'published')
+  .sort((a, b) => new Date(b.data.lastUpdated).getTime() - new Date(a.data.lastUpdated).getTime());
+
+// Group chapters by part
+const frontMatter = chapters.filter(c => c.data.chapter === 0);
+const partChapters = ebookConfig.parts.map(part => ({
+  ...part,
+  chapters: chapters.filter(c => c.data.part === part.number),
+}));
+---
+
+<BaseLayout
+  title="eBook: Spark, Delta Lake, and Databricks in Production | Kiran Kumar"
+  description={ebookConfig.description}
+>
+  <div class="min-h-screen bg-white dark:bg-slate-950">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+      <!-- Book header -->
+      <div class="mb-16">
+        <div class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 mb-4">
+          {ebookConfig.edition} · {publishedCount} of {ebookConfig.totalChapters} chapters published
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-3">
+          {ebookConfig.title}
+        </h1>
+        <p class="text-xl text-slate-500 dark:text-slate-400 mb-4">
+          {ebookConfig.subtitle}
+        </p>
+        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mb-6">
+          {ebookConfig.description}
+        </p>
+        <p class="text-sm text-slate-500 dark:text-slate-500">
+          By <span class="text-slate-700 dark:text-slate-300 font-medium">{ebookConfig.author}</span>
+        </p>
+      </div>
+
+      <!-- Recently published -->
+      {latestPublished.length > 0 && (
+        <div class="mb-12 p-6 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+          <h2 class="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">
+            Recently Published
+          </h2>
+          <div class="space-y-3">
+            {latestPublished.slice(0, 3).map(ch => (
+              <a
+                href={`/ebook/${ch.slug}`}
+                class="block group"
+              >
+                <div class="flex items-baseline justify-between">
+                  <span class="text-slate-900 dark:text-white font-medium group-hover:text-cyan-600 dark:group-hover:text-cyan-400">
+                    {ch.data.chapter === 0 ? ch.data.title : `Ch ${ch.data.chapter}: ${ch.data.title}`}
+                  </span>
+                  <span class="text-sm text-slate-500 dark:text-slate-400 ml-4 shrink-0">
+                    {ch.data.lastUpdated}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Front matter (preface, introduction) -->
+      {frontMatter.length > 0 && (
+        <div class="mb-8">
+          <div class="space-y-2">
+            {frontMatter.map(ch => (
+              <div class="flex items-center justify-between py-3 border-b border-slate-100 dark:border-slate-800">
+                {ch.data.status === 'published' ? (
+                  <a
+                    href={`/ebook/${ch.slug}`}
+                    class="text-slate-900 dark:text-white font-medium hover:text-cyan-600 dark:hover:text-cyan-400"
+                  >
+                    {ch.data.title}
+                  </a>
+                ) : (
+                  <span class="text-slate-400 dark:text-slate-600">{ch.data.title}</span>
+                )}
+                <div class="flex items-center gap-3">
+                  {ch.data.estimatedReadTime && ch.data.status === 'published' && (
+                    <span class="text-xs text-slate-500 dark:text-slate-400">{ch.data.estimatedReadTime}</span>
+                  )}
+                  {ch.data.status !== 'published' && (
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                      Coming Soon
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Table of Contents by Part -->
+      <div class="space-y-10">
+        {partChapters.map(part => (
+          <section>
+            <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-1">
+              Part {part.number}: {part.title}
+            </h2>
+            <div class="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+              {part.chapters.map((ch, i) => (
+                <div
+                  class={`flex items-center justify-between px-5 py-4 ${
+                    i < part.chapters.length - 1 ? 'border-b border-slate-100 dark:border-slate-800' : ''
+                  }`}
+                >
+                  <div class="flex items-baseline gap-3 min-w-0">
+                    <span class="text-sm font-mono text-slate-400 dark:text-slate-500 shrink-0">
+                      {String(ch.data.chapter).padStart(2, '0')}
+                    </span>
+                    {ch.data.status === 'published' ? (
+                      <a
+                        href={`/ebook/${ch.slug}`}
+                        class="text-slate-900 dark:text-white font-medium hover:text-cyan-600 dark:hover:text-cyan-400 truncate"
+                      >
+                        {ch.data.title}
+                      </a>
+                    ) : (
+                      <span class="text-slate-400 dark:text-slate-600 truncate">{ch.data.title}</span>
+                    )}
+                  </div>
+                  <div class="flex items-center gap-3 shrink-0 ml-4">
+                    {ch.data.estimatedReadTime && ch.data.status === 'published' && (
+                      <span class="text-xs text-slate-500 dark:text-slate-400 hidden sm:inline">
+                        {ch.data.estimatedReadTime}
+                      </span>
+                    )}
+                    {ch.data.status === 'published' ? (
+                      <span class="w-2 h-2 rounded-full bg-emerald-500" title="Published"></span>
+                    ) : (
+                      <span class="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                        Coming Soon
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+
+      <!-- Progress bar -->
+      <div class="mt-12 p-6 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300">Book Progress</span>
+          <span class="text-sm text-slate-500 dark:text-slate-400">
+            {publishedCount} / {ebookConfig.totalChapters} chapters
+          </span>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
+          <div
+            class="bg-cyan-600 h-2 rounded-full transition-all"
+            style={`width: ${(publishedCount / ebookConfig.totalChapters) * 100}%`}
+          />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
