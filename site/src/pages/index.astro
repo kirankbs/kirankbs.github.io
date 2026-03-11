@@ -1,129 +1,135 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DataFlowHero from '../components/DataFlowHero.astro';
+import BlogCard from '../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
-import { ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
+import { ebookConfig } from '../data/ebook';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
 const projects = (await getCollection('projects')).slice(0, 2);
+
+const ebookChapters = await getCollection('ebook');
+const publishedCount = ebookChapters.filter(c => c.data.status === 'published').length;
 ---
 
 <BaseLayout>
   <!-- Hero -->
-  <section class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-cyan-50 via-blue-50 to-white dark:from-slate-900 dark:via-slate-900 dark:to-slate-950 opacity-50"></div>
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-32">
-      <div class="flex flex-col lg:flex-row items-center gap-12">
-        <div class="max-w-3xl flex-1">
-          <div class="inline-flex items-center space-x-2 bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 px-4 py-2 rounded-full text-sm font-medium mb-6">
-            <Sparkles client:load className="w-4 h-4" />
-            <span>Data Engineering Thought Leadership</span>
-          </div>
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-            Building Scalable Data Platforms
-          </h1>
-          <p class="text-lg sm:text-xl text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-            Specializing in Apache Spark, Delta Lake, and Databricks to architect lakehouse solutions on Azure.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a href="/blog" class="inline-flex items-center justify-center px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg">
-              Read Articles
-            </a>
-            <a href="/projects" class="inline-flex items-center justify-center px-6 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-900 dark:text-white font-medium rounded-lg">
-              View Projects
-            </a>
-          </div>
-        </div>
-        <div class="flex-shrink-0">
-          <img
-            src="/profile.jpeg"
-            alt="Kiran Kumar"
-            class="w-48 h-48 lg:w-64 lg:h-64 rounded-full object-cover object-top border-4 border-white dark:border-slate-800 shadow-xl"
-          />
-        </div>
+  <section class="relative min-h-[85vh] flex items-center overflow-hidden dot-grid">
+    <DataFlowHero />
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20" data-hero-stagger>
+      <h1 class="text-7xl sm:text-8xl font-bold tracking-tight mb-4" style="font-family: var(--font-heading);">
+        <span class="gradient-text">Kiran Kumar</span>
+      </h1>
+      <p class="text-xl sm:text-2xl mb-6" style="font-family: var(--font-body-serif, var(--font-body)); color: var(--color-text-secondary);">
+        Staff Data Engineer
+      </p>
+      <p class="text-lg max-w-2xl mb-10" style="font-family: var(--font-body); color: var(--color-text-secondary);">
+        I build lakehouse platforms on Spark, Delta Lake, and Databricks — then write about the failures that no getting-started guide covers.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-6">
+        <a href="/blog" class="arrow-link" style="color: var(--color-text);">
+          Read Articles <span class="arrow">&rarr;</span>
+        </a>
+        <a href="/projects" class="arrow-link" style="color: var(--color-text);">
+          View Projects <span class="arrow">&rarr;</span>
+        </a>
+        <a href="/ebook" class="arrow-link" style="color: var(--color-text);">
+          Read the eBook <span class="arrow">&rarr;</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Latest Blog Posts -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="flex items-center justify-between mb-8">
-      <div>
-        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Latest Articles</h2>
-        <p class="text-slate-600 dark:text-slate-400">Deep dives into data engineering topics</p>
-      </div>
-      <a href="/blog" class="hidden sm:flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium">
-        View all &rarr;
+  <!-- Latest Articles -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="mb-10">
+      <span class="section-label">Latest Articles</span>
+      <div class="rule-line"></div>
+    </div>
+
+    <div data-stagger>
+      <BlogCard post={posts[0]} featured />
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6" data-stagger>
+      {posts.slice(1).map((post) => (
+        <BlogCard post={post} />
+      ))}
+    </div>
+
+    <div class="mt-8">
+      <a href="/blog" class="arrow-link" style="color: var(--color-text-secondary);">
+        View all articles <span class="arrow">&rarr;</span>
       </a>
     </div>
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {posts.map((post) => (
-        <a href={`/blog/${post.slug}`} class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700">
-          <div class="flex items-center space-x-2 text-sm text-slate-500 dark:text-slate-400 mb-3">
-            <span>{post.data.date}</span>
-            <span>•</span>
-            <span>{post.data.readTime}</span>
-          </div>
-          <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400">
-            {post.data.title}
+  </section>
+
+  <!-- eBook Callout -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <a href="/ebook" class="block p-6 rounded-lg border-l-4" style={`border-left-color: var(--color-accent); border-top: 1px solid var(--color-border); border-right: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); background: var(--color-surface);`} data-animate>
+      <p class="text-sm font-medium tracking-wide uppercase mb-1" style="color: var(--color-accent);">
+        Free eBook
+      </p>
+      <h3 class="text-xl font-bold mb-1" style="font-family: var(--font-heading); color: var(--color-text);">
+        {ebookConfig.title}
+      </h3>
+      <p class="text-sm mb-2" style="font-family: var(--font-body); color: var(--color-text-secondary);">
+        {ebookConfig.subtitle}
+      </p>
+      <p class="text-sm" style="color: var(--color-text-secondary);">
+        Early Access — {publishedCount} chapters published
+      </p>
+    </a>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20" style="border-top: 1px solid var(--color-border);">
+    <div class="mb-10">
+      <span class="section-label">Featured Projects</span>
+      <div class="rule-line"></div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-8" data-stagger>
+      {projects.map((project) => (
+        <a href={`/projects/${project.slug}`} class="group block card-hover rounded-lg p-6 border" style={`border-color: var(--color-border); background: var(--color-surface);`}>
+          <span class="text-sm" style="color: var(--color-text-secondary);">{project.data.date}</span>
+          <h3 class="text-2xl font-bold mt-2 mb-3 hover-underline inline-block" style={`font-family: var(--font-heading); color: var(--color-text);`}>
+            {project.data.title}
           </h3>
-          <p class="text-slate-600 dark:text-slate-400 mb-4">{post.data.excerpt}</p>
+          <p class="text-sm mb-4" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+            {project.data.excerpt}
+          </p>
           <div class="flex flex-wrap gap-2">
-            {post.data.tags.map((tag) => (
-              <span class="text-xs px-2 py-1 bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 rounded-md">{tag}</span>
+            {project.data.tags.map((tag: string, i: number) => (
+              <span>
+                <span class="tag-editorial">{tag}</span>
+                {i < project.data.tags.length - 1 && <span class="tag-editorial mx-1">/</span>}
+              </span>
             ))}
           </div>
         </a>
       ))}
     </div>
-  </section>
 
-  <!-- Featured Projects -->
-  <section class="bg-slate-50 dark:bg-slate-900/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Featured Projects</h2>
-          <p class="text-slate-600 dark:text-slate-400">Architecture case studies and implementations</p>
-        </div>
-        <a href="/projects" class="hidden sm:flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium">
-          View all &rarr;
-        </a>
-      </div>
-      <div class="grid lg:grid-cols-2 gap-6">
-        {projects.map((project) => (
-          <a href={`/projects/${project.slug}`} class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-8 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700">
-            <div class="flex items-start justify-between mb-4">
-              <div class="p-3 bg-cyan-50 dark:bg-cyan-950 rounded-lg">
-                <TrendingUp client:load className="w-6 h-6 text-cyan-600 dark:text-cyan-400" />
-              </div>
-              <span class="text-sm text-slate-500 dark:text-slate-400">{project.data.date}</span>
-            </div>
-            <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-cyan-600 dark:group-hover:text-cyan-400">
-              {project.data.title}
-            </h3>
-            <p class="text-slate-600 dark:text-slate-400 mb-4">{project.data.excerpt}</p>
-            <div class="flex flex-wrap gap-2">
-              {project.data.tags.map((tag) => (
-                <span class="text-xs px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full">{tag}</span>
-              ))}
-            </div>
-          </a>
-        ))}
-      </div>
+    <div class="mt-8">
+      <a href="/projects" class="arrow-link" style="color: var(--color-text-secondary);">
+        View all projects <span class="arrow">&rarr;</span>
+      </a>
     </div>
   </section>
 
   <!-- CTA -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <div class="bg-gradient-to-br from-cyan-600 to-blue-700 rounded-2xl p-8 sm:p-12 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Let's Connect</h2>
-      <p class="text-cyan-50 text-lg mb-8 max-w-2xl mx-auto">
-        Always open to connecting with fellow data engineers, sharing knowledge, and discussing the latest in data platform technologies.
-      </p>
-      <a href="/contact" class="inline-flex items-center px-8 py-4 bg-white hover:bg-slate-50 text-cyan-700 font-medium rounded-lg">
-        Get in Touch &rarr;
+  <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center">
+    <p class="text-2xl sm:text-3xl leading-relaxed" style="font-family: var(--font-body-serif, var(--font-body)); color: var(--color-text);">
+      <span style="color: var(--color-text-secondary);">—</span>
+      Always open to connecting with fellow engineers, swapping war stories, and talking shop about data platforms.
+      <span style="color: var(--color-text-secondary);">—</span>
+    </p>
+    <div class="mt-8">
+      <a href="/contact" class="arrow-link" style="color: var(--color-text);">
+        Get in touch <span class="arrow">&rarr;</span>
       </a>
     </div>
   </section>

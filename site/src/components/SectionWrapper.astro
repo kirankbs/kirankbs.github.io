@@ -1,0 +1,30 @@
+---
+interface Props {
+  maxWidth?: '4xl' | '7xl';
+  background?: 'none' | 'mesh' | 'pattern';
+  animate?: boolean;
+  stagger?: boolean;
+  class?: string;
+}
+
+const {
+  maxWidth = '7xl',
+  background = 'none',
+  animate = false,
+  stagger = false,
+  class: className = '',
+} = Astro.props;
+
+const widthClass = maxWidth === '4xl' ? 'max-w-4xl' : 'max-w-7xl';
+const bgClass = background === 'mesh' ? 'gradient-mesh' : background === 'pattern' ? 'dot-grid' : '';
+---
+
+<section
+  class:list={[bgClass, className]}
+  {...animate ? { 'data-animate': '' } : {}}
+  {...stagger ? { 'data-stagger': '' } : {}}
+>
+  <div class:list={[widthClass, 'mx-auto px-4 sm:px-6 lg:px-8 py-16']}>
+    <slot />
+  </div>
+</section>

@@ -1,79 +1,149 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { upcomingEvents, pastEvents } from '../data/events.js';
 ---
 
 <BaseLayout title="Events | Kiran Kumar" description="Speaking engagements, workshops, and community events focused on data engineering.">
-  <div class="min-h-screen bg-white dark:bg-slate-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="mb-12">
-        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Events & Workshops</h1>
-        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl">
-          Speaking engagements, workshops, and community events focused on data engineering excellence.
-        </p>
-      </div>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-      <section class="mb-16">
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Upcoming Events</h2>
-        {upcomingEvents.length > 0 ? (
-          <div class="space-y-6">
-            {upcomingEvents.map((event: any) => (
-              <div class="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 border border-cyan-200 dark:border-cyan-800 rounded-xl p-6">
-                <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                  <div class="flex-grow">
-                    <div class="flex items-center space-x-2 mb-2">
-                      <span class="px-3 py-1 bg-cyan-600 text-white text-xs font-medium rounded-full">{event.type}</span>
-                      <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs font-medium rounded-full">Upcoming</span>
-                    </div>
-                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">{event.title}</h3>
-                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-2">{event.date} • {event.location}</p>
-                    <p class="text-slate-700 dark:text-slate-300">{event.description}</p>
-                  </div>
-                  {event.registrationLink ? (
-                    <a href={event.registrationLink} class="inline-flex items-center justify-center px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg whitespace-nowrap">
-                      Register Now
-                    </a>
-                  ) : (
-                    <span class="inline-flex items-center justify-center px-6 py-3 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 font-medium rounded-lg whitespace-nowrap">
-                      Registration TBA
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p class="text-slate-600 dark:text-slate-400">No upcoming events at the moment. Check back soon!</p>
-        )}
-      </section>
+    <PageHeader title="Events & Workshops" subtitle="Speaking engagements, workshops, and community events focused on data engineering excellence." />
 
-      <section>
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Past Events</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          {pastEvents.map((event: any) => (
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg">
-              <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-full">{event.type}</span>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-white mt-3 mb-2">{event.title}</h3>
-              <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">{event.date} • {event.location}</p>
-              <p class="text-slate-600 dark:text-slate-400 mb-4">{event.description}</p>
-              <div class="flex flex-wrap gap-3">
-                {event.videoLink && (
-                  <a href={event.videoLink} target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 text-sm font-medium">
-                    Watch Video &rarr;
-                  </a>
-                )}
-                {event.slidesLink && (
-                  <a href={event.slidesLink} target="_blank" rel="noopener noreferrer"
-                    class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 text-sm font-medium">
-                    View Slides &rarr;
-                  </a>
-                )}
-              </div>
+    <!-- Upcoming -->
+    <section class="mb-16">
+      <h2
+        class="section-label mb-6"
+        style="color: var(--color-accent);"
+      >
+        Upcoming
+      </h2>
+
+      {upcomingEvents.length > 0 ? (
+        <div data-stagger>
+          {upcomingEvents.map((event: any) => (
+            <div
+              class="card-hover p-6 mb-4"
+              style={`border: 1px solid var(--color-border); border-left: 4px solid var(--color-accent); border-radius: 0.5rem;`}
+            >
+              <div class="tag-editorial mb-2">{event.type}</div>
+
+              <h3
+                class="text-xl font-bold mb-2"
+                style={`font-family: var(--font-heading); color: var(--color-text);`}
+              >
+                {event.title}
+              </h3>
+
+              <p class="text-sm mb-3" style={`font-family: var(--font-mono); color: var(--color-text-secondary);`}>
+                {event.date} &middot; {event.location}
+              </p>
+
+              <p class="text-base mb-4" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+                {event.description}
+              </p>
+
+              {event.registrationLink ? (
+                <a
+                  href={event.registrationLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="arrow-link text-sm font-medium"
+                  style={`font-family: var(--font-heading); color: var(--color-accent);`}
+                >
+                  Register <span class="arrow">&rarr;</span>
+                </a>
+              ) : (
+                <span
+                  class="text-sm"
+                  style={`font-family: var(--font-mono); color: var(--color-text-secondary);`}
+                >
+                  Registration TBA
+                </span>
+              )}
             </div>
           ))}
         </div>
-      </section>
-    </div>
+      ) : (
+        <p style={`color: var(--color-text-secondary); font-family: var(--font-body);`}>
+          No upcoming events at the moment. Check back soon.
+        </p>
+      )}
+    </section>
+
+    <!-- Past Events — Timeline -->
+    <section>
+      <h2
+        class="section-label mb-8"
+        style="color: var(--color-text-secondary);"
+      >
+        Past
+      </h2>
+
+      <div class="relative" style={`padding-left: 2rem;`} data-stagger>
+        <!-- Timeline line -->
+        <div
+          class="absolute top-0 bottom-0"
+          style={`left: 7px; width: 1px; background: var(--color-border);`}
+        />
+
+        {pastEvents.map((event: any) => (
+          <div class="relative pb-10">
+            <!-- Timeline dot -->
+            <div
+              class="absolute"
+              style={`left: -2rem; top: 0.35rem; width: 15px; height: 15px; border-radius: 50%; border: 2px solid var(--color-border); background: var(--color-bg);`}
+            />
+
+            <span
+              class="tag-editorial block mb-1"
+              style="color: var(--color-text-secondary);"
+            >
+              {event.date}
+            </span>
+
+            <h3
+              class="text-lg font-bold mb-1"
+              style={`font-family: var(--font-heading); color: var(--color-text);`}
+            >
+              {event.title}
+            </h3>
+
+            <p class="text-sm mb-2" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+              {event.location}
+            </p>
+
+            <p class="text-base mb-3" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+              {event.description}
+            </p>
+
+            <div class="flex flex-wrap gap-4">
+              {event.videoLink && (
+                <a
+                  href={event.videoLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="arrow-link text-sm font-medium"
+                  style={`font-family: var(--font-heading); color: var(--color-accent-secondary);`}
+                >
+                  Watch Video <span class="arrow">&rarr;</span>
+                </a>
+              )}
+              {event.slidesLink && (
+                <a
+                  href={event.slidesLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="arrow-link text-sm font-medium"
+                  style={`font-family: var(--font-heading); color: var(--color-accent-secondary);`}
+                >
+                  View Slides <span class="arrow">&rarr;</span>
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
   </div>
 </BaseLayout>

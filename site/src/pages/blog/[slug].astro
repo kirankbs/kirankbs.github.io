@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
+import BlogCard from '../../components/BlogCard.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -9,38 +11,94 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+
+const allPosts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const currentTags = new Set(post.data.tags);
+const related = allPosts
+  .filter(p => p.slug !== post.slug && p.data.tags.some((t: string) => currentTags.has(t)))
+  .slice(0, 3);
 ---
 
 <BaseLayout title={`${post.data.title} | Kiran Kumar`} description={post.data.excerpt}>
-  <article class="min-h-screen bg-white dark:bg-slate-950">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <a href="/blog" class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 mb-8 font-medium">
-        &larr; Back to Blog
-      </a>
+  <ReadingProgress />
 
-      <header class="mb-8">
-        <div class="flex flex-wrap gap-2 mb-4">
-          {post.data.tags.map((tag) => (
-            <span class="text-xs px-3 py-1 bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 rounded-full">{tag}</span>
-          ))}
-        </div>
-        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">{post.data.title}</h1>
-        <div class="flex items-center space-x-4 text-slate-600 dark:text-slate-400">
-          <span>{post.data.date}</span>
-          <span>•</span>
-          <span>{post.data.readTime}</span>
-        </div>
-      </header>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-      <div class="prose prose-slate dark:prose-invert max-w-none">
-        <Content />
+    <!-- Back link -->
+    <a href="/blog" class="arrow-link mb-8 inline-block" style="color: var(--color-accent);">
+      &larr; Back to Blog
+    </a>
+
+    <header class="mb-10" data-animate>
+      <!-- Tags as editorial metadata -->
+      <div class="flex flex-wrap gap-1 mb-4">
+        {post.data.tags.map((tag: string, i: number) => (
+          <span>
+            <span class="tag-editorial">{tag}</span>
+            {i < post.data.tags.length - 1 && <span class="tag-editorial mx-1">/</span>}
+          </span>
+        ))}
       </div>
 
-      <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
-        <a href="/blog" class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium">
-          &larr; More Articles
-        </a>
-      </footer>
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4" style={`font-family: var(--font-heading); color: var(--color-text);`}>
+        {post.data.title}
+      </h1>
+
+      <!-- Date + read time with em dash -->
+      <div class="flex items-center gap-2" style="color: var(--color-text-secondary); font-family: var(--font-body);">
+        <span>{post.data.date}</span>
+        <span>&mdash;</span>
+        <span>{post.data.readTime}</span>
+      </div>
+
+      <div class="rule-line w-16 mt-6"></div>
+    </header>
+
+    <div class="prose prose-lg max-w-none" data-animate>
+      <Content />
     </div>
+
+    <!-- Share area -->
+    <div class="mt-12 pt-8 flex items-center gap-4" style={`border-top: 1px solid var(--color-border);`}>
+      <span class="section-label">Share</span>
+      <button id="copy-link-btn" class="filter-btn" type="button">
+        Copy link
+      </button>
+    </div>
+
+    <!-- Related Articles -->
+    {related.length > 0 && (
+      <section class="mt-16">
+        <div class="rule-line w-12 mb-4"></div>
+        <h2 class="section-label mb-8">Related Articles</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger>
+          {related.map(p => (
+            <BlogCard post={p} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <footer class="mt-12 pt-8" style={`border-top: 1px solid var(--color-border);`}>
+      <a href="/blog" class="arrow-link" style="color: var(--color-accent);">
+        &larr; All Articles
+      </a>
+    </footer>
+
   </article>
 </BaseLayout>
+
+<script is:inline>
+  (function() {
+    var btn = document.getElementById('copy-link-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      navigator.clipboard.writeText(window.location.href).then(function() {
+        btn.textContent = 'Copied!';
+        setTimeout(function() { btn.textContent = 'Copy link'; }, 2000);
+      });
+    });
+  })();
+</script>

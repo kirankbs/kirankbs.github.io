@@ -1,0 +1,20 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+}
+
+const { title, subtitle } = Astro.props;
+---
+
+<div class="mb-12" data-animate>
+  <div class="rule-line w-16 mb-6"></div>
+  <h1 class="text-4xl sm:text-5xl font-extrabold" style={`font-family: var(--font-heading); color: var(--color-text);`}>
+    {title}
+  </h1>
+  {subtitle && (
+    <p class="mt-4 text-lg" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+      {subtitle}
+    </p>
+  )}
+</div>

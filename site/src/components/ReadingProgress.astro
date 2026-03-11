@@ -1,0 +1,25 @@
+---
+---
+
+<div id="reading-progress" class="reading-progress" style="width: 0%"></div>
+
+<script is:inline>
+  (function() {
+    const bar = document.getElementById('reading-progress');
+    if (!bar) return;
+    let ticking = false;
+    function update() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      bar.style.width = Math.min(progress, 100) + '%';
+      ticking = false;
+    }
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(update);
+        ticking = true;
+      }
+    });
+  })();
+</script>

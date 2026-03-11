@@ -1,0 +1,13 @@
+---
+interface Props {
+  text: string;
+  separator?: boolean;
+}
+
+const { text, separator = false } = Astro.props;
+---
+
+<span>
+  <span class="tag-editorial">{text}</span>
+  {separator && <span class="tag-editorial mx-1">/</span>}
+</span>

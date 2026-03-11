@@ -1,75 +1,106 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { resources } from '../data/resources.js';
 
-const categories = ['All', ...new Set(resources.map((r: any) => r.category))];
+const categories = [...new Set(resources.map((r: any) => r.category))];
+const allFilters = ['All', ...categories];
 ---
 
 <BaseLayout title="Resources | Kiran Kumar" description="Curated guides, templates, and references for data engineering professionals.">
-  <div class="min-h-screen bg-white dark:bg-slate-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="mb-12">
-        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Resources</h1>
-        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-3xl">
-          Curated collection of guides, templates, and references for data engineering professionals.
-        </p>
-      </div>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-      <div class="mb-8 flex flex-wrap gap-2" id="category-filters">
-        {categories.map((category: string) => (
-          <button
-            data-category={category}
-            class={`cat-btn px-4 py-2 rounded-lg text-sm font-medium ${category === 'All' ? 'bg-cyan-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+    <PageHeader title="Resources" subtitle="Curated collection of guides, templates, and references for data engineering professionals." />
+
+    <!-- Category filters -->
+    <nav class="mb-10 flex flex-wrap gap-4" id="category-filters" data-animate>
+      {allFilters.map((cat) => (
+        <button
+          data-category={cat}
+          class={`filter-btn ${cat === 'All' ? 'active' : ''}`}
+        >
+          {cat}
+        </button>
+      ))}
+    </nav>
+
+    <!-- Resources grouped by category -->
+    <div id="resources-list">
+      {categories.map((category: string) => (
+        <section data-cat-section={category} class="mb-12">
+          <h2
+            class="section-label mb-6"
+            style="color: var(--color-accent);"
           >
             {category}
-          </button>
-        ))}
-      </div>
+          </h2>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="resources-grid">
-        {resources.map((resource: any) => (
-          <div
-            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 hover:shadow-lg hover:border-cyan-300 dark:hover:border-cyan-700"
-            data-category={resource.category}
-          >
-            <div class="flex items-start justify-between mb-4">
-              <div class="p-3 bg-cyan-50 dark:bg-cyan-950 rounded-lg">
-                <svg class="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium rounded">{resource.type}</span>
-            </div>
-            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">{resource.title}</h3>
-            <p class="text-slate-600 dark:text-slate-400 text-sm mb-4">{resource.description}</p>
-            {resource.downloadLink && (
-              <a href={resource.downloadLink} target="_blank" rel="noopener noreferrer"
-                class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium text-sm">
-                {resource.type === 'External' ? 'Visit Resource' : 'Download'} &rarr;
-              </a>
-            )}
+          <div data-stagger>
+            {resources
+              .filter((r: any) => r.category === category)
+              .map((resource: any, i: number) => (
+                <div
+                  class="py-5"
+                  data-resource-category={resource.category}
+                  style={`border-bottom: 1px solid var(--color-border);`}
+                >
+                  <div class="flex items-start justify-between gap-4">
+                    <div class="flex-grow">
+                      <h3
+                        class="text-lg font-bold mb-1"
+                        style={`font-family: var(--font-heading); color: var(--color-text);`}
+                      >
+                        {resource.title}
+                      </h3>
+
+                      <p
+                        class="text-base mb-2"
+                        style={`font-family: var(--font-body); color: var(--color-text-secondary);`}
+                      >
+                        {resource.description}
+                      </p>
+
+                      {resource.downloadLink && (
+                        <a
+                          href={resource.downloadLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="hover-underline text-sm font-medium"
+                          style={`font-family: var(--font-heading); color: var(--color-accent-secondary);`}
+                        >
+                          {resource.type === 'External' ? 'Visit Resource' : 'Download'}
+                        </a>
+                      )}
+                    </div>
+
+                    <span class="tag-editorial flex-shrink-0 mt-1">
+                      {resource.type}
+                    </span>
+                  </div>
+                </div>
+              ))}
           </div>
-        ))}
-      </div>
+        </section>
+      ))}
     </div>
+
   </div>
 </BaseLayout>
 
 <script>
-  const buttons = document.querySelectorAll('.cat-btn');
-  const cards = document.querySelectorAll('#resources-grid [data-category]');
+  const buttons = document.querySelectorAll<HTMLButtonElement>('#category-filters .filter-btn');
+  const sections = document.querySelectorAll<HTMLElement>('[data-cat-section]');
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const cat = btn.getAttribute('data-category');
-      buttons.forEach(b => {
-        b.classList.remove('bg-cyan-600', 'text-white');
-        b.classList.add('bg-slate-100', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
-      });
-      btn.classList.add('bg-cyan-600', 'text-white');
-      btn.classList.remove('bg-slate-100', 'text-slate-700');
-      cards.forEach(card => {
-        (card as HTMLElement).style.display = (cat === 'All' || card.getAttribute('data-category') === cat) ? '' : 'none';
+
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      sections.forEach(section => {
+        const sectionCat = section.getAttribute('data-cat-section');
+        section.style.display = (cat === 'All' || sectionCat === cat) ? '' : 'none';
       });
     });
   });

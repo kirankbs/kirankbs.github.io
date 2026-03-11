@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Sun, Moon, Menu, X } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import { siteConfig } from '../site.config';
 
 const navItems = [
@@ -18,10 +19,15 @@ export default function Header() {
   const [isDark, setIsDark] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentPath, setCurrentPath] = useState('/');
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     setCurrentPath(window.location.pathname);
     setIsDark(document.documentElement.classList.contains('dark'));
+
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   function toggleTheme() {
@@ -43,14 +49,34 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 bg-opacity-90 dark:bg-opacity-90 backdrop-blur-sm">
+    <header
+      className={`sticky top-0 z-50 backdrop-blur-lg transition-shadow duration-300 ${
+        scrolled ? 'shadow-sm' : ''
+      }`}
+      style={{
+        backgroundColor: 'color-mix(in srgb, var(--color-bg) 85%, transparent)',
+        borderBottom: '1px solid var(--color-border)',
+      }}
+    >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <a href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">{siteConfig.initials}</span>
-            </div>
-            <span className="text-xl font-bold text-slate-900 dark:text-white hidden sm:block">
+          <a href="/" className="flex items-center space-x-3 group">
+            <span
+              className="text-2xl font-extrabold"
+              style={{
+                fontFamily: 'var(--font-heading)',
+                color: 'var(--color-accent)',
+              }}
+            >
+              KK
+            </span>
+            <span
+              className="text-lg font-bold hidden sm:block"
+              style={{
+                fontFamily: 'var(--font-heading)',
+                color: 'var(--color-text)',
+              }}
+            >
               {siteConfig.name}
             </span>
           </a>
@@ -60,29 +86,44 @@ export default function Header() {
               <a
                 key={item.path}
                 href={item.path}
-                className={`px-3 py-2 rounded-lg text-sm font-medium ${
-                  isActive(item.path)
-                    ? 'bg-cyan-50 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
+                className="relative px-3 py-2 text-sm font-medium transition-colors"
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  color: isActive(item.path) ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                }}
               >
                 {item.label}
+                {isActive(item.path) && (
+                  <span
+                    className="absolute bottom-0 left-3 right-3 h-0.5"
+                    style={{ backgroundColor: 'var(--color-accent)' }}
+                  />
+                )}
               </a>
             ))}
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+              className="p-2 rounded-lg transition-colors"
+              style={{ color: 'var(--color-text-secondary)' }}
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              <motion.div
+                key={isDark ? 'sun' : 'moon'}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </motion.div>
             </button>
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+              className="lg:hidden p-2 rounded-lg"
+              style={{ color: 'var(--color-text-secondary)' }}
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -90,24 +131,34 @@ export default function Header() {
           </div>
         </div>
 
-        {mobileMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-slate-200 dark:border-slate-800">
-            {navItems.map((item) => (
-              <a
-                key={item.path}
-                href={item.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-3 py-2 rounded-lg text-sm font-medium mb-1 ${
-                  isActive(item.path)
-                    ? 'bg-cyan-50 dark:bg-slate-800 text-cyan-600 dark:text-cyan-400'
-                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                }`}
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{ duration: 0.25 }}
+              className="lg:hidden py-4"
+              style={{ borderTop: '1px solid var(--color-border)' }}
+            >
+              {navItems.map((item) => (
+                <a
+                  key={item.path}
+                  href={item.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 text-sm font-medium mb-1 rounded-lg transition-colors"
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    color: isActive(item.path) ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                    borderLeft: isActive(item.path) ? '3px solid var(--color-accent)' : '3px solid transparent',
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   );

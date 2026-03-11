@@ -1,88 +1,150 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { timeline, skills } from '../data/about.js';
+
+const coreSkills = skills.slice(0, 2);
+const supportingSkills = skills.slice(2);
 ---
 
 <BaseLayout title="About | Kiran Kumar" description="Data Engineer specializing in Apache Spark, Delta Lake, and Databricks on Azure.">
-  <div class="min-h-screen bg-white dark:bg-slate-950">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-      <div class="mb-12">
-        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8 mb-6">
-          <img
-            src="/profile.jpeg"
-            alt="Kiran Kumar"
-            class="w-32 h-32 rounded-full object-cover object-top border-4 border-white dark:border-slate-800 shadow-lg flex-shrink-0"
-          />
-          <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white">About Me</h1>
-        </div>
+    <PageHeader title="About" subtitle="Data Engineer — building lakehouse platforms, streaming pipelines, and the infrastructure around them." />
+
+    <!-- Intro with photo -->
+    <section class="mb-16" data-animate>
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8">
+        <img
+          src="/profile.jpeg"
+          alt="Kiran Kumar"
+          class="w-40 h-48 rounded-lg object-cover object-top flex-shrink-0 -mb-6 relative z-10"
+          style={`box-shadow: 0 8px 30px color-mix(in srgb, var(--color-accent) 20%, transparent);`}
+        />
         <div class="space-y-4">
-          <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p class="text-lg leading-relaxed" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
             I'm a Data Engineer specializing in building scalable, efficient data platforms that drive business value.
             With deep expertise in Apache Spark, Delta Lake, and Databricks on Azure, I architect lakehouse solutions
             that prioritize data governance, cost optimization, and performance.
           </p>
-          <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
-            My approach combines technical excellence with business acumen, ensuring that data infrastructure
-            not only scales but also delivers measurable ROI through intelligent design and implementation.
+          <p class="text-lg leading-relaxed" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+            My approach combines technical depth with business context — data infrastructure should scale,
+            but it also needs to deliver measurable ROI through intelligent design.
           </p>
         </div>
       </div>
+    </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Professional Philosophy</h2>
-        <div class="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
-          <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
-            Data engineering is not just about moving data — it's about creating robust, maintainable systems
-            that enable organizations to make data-driven decisions at scale. I believe in:
-          </p>
-          <ul class="mt-4 space-y-2 text-slate-700 dark:text-slate-300">
-            {[
-              'Architecture-first thinking: Building foundations that scale',
-              'Cost-conscious engineering: Optimizing for performance and budget',
-              'Data governance by design: Security and quality from day one',
-              'Continuous learning: Staying ahead in a rapidly evolving field',
-            ].map(item => (
-              <li class="flex items-start">
-                <span class="text-cyan-600 dark:text-cyan-400 mr-2">•</span>
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+    <!-- Philosophy pull-quote -->
+    <section class="mb-20 max-w-3xl mx-auto" data-animate>
+      <div class="relative pl-4 sm:pl-8">
+        <span
+          class="absolute -top-4 -left-2 text-6xl leading-none select-none"
+          style={`font-family: var(--font-heading); color: var(--color-accent); opacity: 0.5;`}
+          aria-hidden="true">&ldquo;</span>
+        <p
+          class="text-xl sm:text-2xl italic leading-relaxed"
+          style={`font-family: Georgia, 'Times New Roman', serif; color: var(--color-text);`}>
+          Data engineering is not about moving data — it's about creating robust, maintainable systems
+          that let organizations make decisions at scale. Architecture first, cost-conscious always,
+          governance by design.
+        </p>
+      </div>
+    </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Career Journey</h2>
-        <div class="space-y-6">
-          {timeline.map((item: any, index: number) => (
-            <div class="relative pl-8 pb-8 border-l-2 border-slate-200 dark:border-slate-800 last:pb-0 last:border-l-0">
-              <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-cyan-600 dark:bg-cyan-400"></div>
-              <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">{item.year}</p>
-              <h3 class="text-xl font-bold text-slate-900 dark:text-white">{item.role}</h3>
-              <p class="text-cyan-600 dark:text-cyan-400 font-medium mb-2">{item.company}</p>
-              <p class="text-slate-600 dark:text-slate-400">{item.description}</p>
+    <!-- Career Timeline -->
+    <section class="mb-20">
+      <h2
+        class="text-2xl font-extrabold mb-8"
+        style={`font-family: var(--font-heading); color: var(--color-text);`}
+        data-animate>
+        Career Journey
+      </h2>
+
+      <!-- Gradient accent line -->
+      <div class="hidden sm:block h-1 rounded-full mb-8" style={`background: linear-gradient(to right, var(--color-accent), var(--color-accent-secondary));`}></div>
+
+      <!-- Horizontal scroll on desktop, vertical stack on mobile -->
+      <div
+        class="sm:overflow-x-auto sm:flex sm:gap-6 sm:snap-x sm:snap-mandatory sm:pb-4 space-y-6 sm:space-y-0"
+        data-stagger
+        style="scrollbar-width: thin;">
+        {timeline.map((item: any) => (
+          <div
+            class="sm:min-w-[300px] sm:max-w-[320px] sm:flex-shrink-0 sm:snap-start p-5 rounded-lg border"
+            style={`border-color: var(--color-border); background: var(--color-surface);`}>
+            <p
+              class="text-sm mb-2"
+              style={`font-family: var(--font-mono); color: var(--color-text-secondary);`}>
+              {item.year}
+            </p>
+            <h3
+              class="text-lg font-bold mb-1"
+              style={`font-family: var(--font-heading); color: var(--color-text);`}>
+              {item.role}
+            </h3>
+            <p class="text-sm font-medium mb-3" style={`color: var(--color-accent);`}>
+              {item.company}
+            </p>
+            <p class="text-sm leading-relaxed" style={`font-family: var(--font-body); color: var(--color-text-secondary);`}>
+              {item.description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="mb-12">
+      <h2
+        class="text-2xl font-extrabold mb-10"
+        style={`font-family: var(--font-heading); color: var(--color-text);`}
+        data-animate>
+        Technical Expertise
+      </h2>
+
+      <!-- Core skills — larger treatment -->
+      <div class="grid md:grid-cols-2 gap-8 mb-10" data-stagger>
+        {coreSkills.map((group: any) => (
+          <div>
+            <h3
+              class="text-lg font-bold mb-4"
+              style={`font-family: var(--font-heading); color: var(--color-text);`}>
+              {group.category}
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              {group.items.map((skill: string) => (
+                <span
+                  class="px-3 py-1.5 rounded text-sm font-medium border"
+                  style={`font-family: var(--font-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text); border-color: var(--color-border); background: color-mix(in srgb, var(--color-accent) 8%, transparent);`}>
+                  {skill}
+                </span>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        ))}
+      </div>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-6">Technical Expertise</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          {skills.map((skillGroup: any) => (
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6">
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4">{skillGroup.category}</h3>
-              <div class="flex flex-wrap gap-2">
-                {skillGroup.items.map((skill: string) => (
-                  <span class="px-3 py-1 bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 rounded-lg text-sm font-medium">{skill}</span>
-                ))}
-              </div>
+      <!-- Supporting skills — lighter, smaller -->
+      <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-6" data-stagger>
+        {supportingSkills.map((group: any) => (
+          <div>
+            <h3
+              class="text-sm font-semibold mb-3"
+              style={`font-family: var(--font-heading); color: var(--color-text-secondary);`}>
+              {group.category}
+            </h3>
+            <div class="flex flex-wrap gap-1.5">
+              {group.items.map((skill: string) => (
+                <span class="tag-editorial">
+                  {skill}
+                </span>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+        ))}
+      </div>
+    </section>
 
-    </div>
   </div>
 </BaseLayout>

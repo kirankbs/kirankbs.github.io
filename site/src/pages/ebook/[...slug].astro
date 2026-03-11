@@ -25,17 +25,21 @@ const isDraft = chapter.data.status !== 'published';
   estimatedReadTime={chapter.data.estimatedReadTime}
   blogPostRef={chapter.data.blogPostRef}
   dataset={chapter.data.dataset}
+  data-chapter={chapter.data.chapter}
 >
   {isDraft ? (
     <div class="py-16 text-center">
-      <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 mb-6">
+      <span
+        class="inline-block px-4 py-2 rounded-full text-sm font-medium mb-6"
+        style="background-color: color-mix(in srgb, var(--color-accent) 15%, transparent); color: var(--color-accent);"
+      >
         Coming Soon
-      </div>
-      <p class="text-lg text-slate-600 dark:text-slate-400 max-w-lg mx-auto mb-2">
+      </span>
+      <p class="text-lg mb-2" style="color: var(--color-text-secondary); max-width: 28rem; margin-left: auto; margin-right: auto;">
         This chapter is currently being written.
       </p>
-      <p class="text-slate-500 dark:text-slate-500">
-        Subscribe to the <a href="https://newsletter.kirankbs.com/" class="text-cyan-600 dark:text-cyan-400 hover:underline">newsletter</a> to get notified when new chapters drop.
+      <p style="color: var(--color-text-secondary);">
+        Subscribe to the <a href="https://newsletter.kirankbs.com/" class="hover-underline" style="color: var(--color-accent-secondary);">newsletter</a> to get notified when new chapters drop.
       </p>
     </div>
   ) : (

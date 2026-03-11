@@ -1,0 +1,85 @@
+---
+---
+
+<div class="data-flow-hero absolute inset-0 z-0 opacity-40 overflow-hidden" aria-hidden="true">
+  <svg viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+    <!-- Flow paths -->
+    <path
+      d="M-50 300 C100 300, 150 180, 250 180 S400 300, 500 250 S650 150, 850 200"
+      stroke="var(--color-border)"
+      stroke-width="1.5"
+      class="flow-path"
+      style="stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: drawPath 3s ease forwards;"
+    />
+    <path
+      d="M-50 400 C80 380, 200 450, 300 400 S450 300, 550 350 S700 400, 850 350"
+      stroke="var(--color-border)"
+      stroke-width="1.5"
+      class="flow-path"
+      style="stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: drawPath 3s ease 0.5s forwards;"
+    />
+    <path
+      d="M-50 200 C120 220, 180 100, 300 130 S420 200, 520 160 S680 100, 850 150"
+      stroke="var(--color-border)"
+      stroke-width="1"
+      class="flow-path"
+      style="stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: drawPath 3s ease 1s forwards;"
+    />
+    <path
+      d="M200 500 C250 480, 300 420, 350 400 S450 380, 500 350"
+      stroke="var(--color-border)"
+      stroke-width="1"
+      class="flow-path"
+      style="stroke-dasharray: 800; stroke-dashoffset: 800; animation: drawPath 2.5s ease 1.5s forwards;"
+    />
+
+    <!-- Nodes (intersection points) -->
+    <circle cx="250" cy="180" r="6" fill="var(--color-accent)" class="node-pulse" style="animation: nodePulse 3s ease-in-out infinite;" />
+    <circle cx="500" cy="250" r="5" fill="var(--color-accent)" class="node-pulse" style="animation: nodePulse 3s ease-in-out 1s infinite;" />
+    <circle cx="300" cy="400" r="6" fill="var(--color-accent-secondary)" class="node-pulse" style="animation: nodePulse 3s ease-in-out 0.5s infinite;" />
+    <circle cx="550" cy="350" r="5" fill="var(--color-accent-secondary)" class="node-pulse" style="animation: nodePulse 3s ease-in-out 1.5s infinite;" />
+
+    <!-- Traveling dots on path 1 -->
+    <circle r="3" fill="var(--color-accent)">
+      <animateMotion dur="8s" repeatCount="indefinite" begin="2s">
+        <mpath href="#flow1" />
+      </animateMotion>
+    </circle>
+
+    <!-- Traveling dots on path 2 -->
+    <circle r="3" fill="var(--color-accent-secondary)">
+      <animateMotion dur="10s" repeatCount="indefinite" begin="3s">
+        <mpath href="#flow2" />
+      </animateMotion>
+    </circle>
+
+    <!-- Hidden motion paths for animateMotion -->
+    <path id="flow1" d="M-50 300 C100 300, 150 180, 250 180 S400 300, 500 250 S650 150, 850 200" fill="none" />
+    <path id="flow2" d="M-50 400 C80 380, 200 450, 300 400 S450 300, 550 350 S700 400, 850 350" fill="none" />
+  </svg>
+</div>
+
+<style>
+  @keyframes drawPath {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes nodePulse {
+    0%, 100% { opacity: 0.4; r: 5; }
+    50% { opacity: 0.9; r: 7; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flow-path {
+      stroke-dashoffset: 0 !important;
+      animation: none !important;
+    }
+    .node-pulse {
+      animation: none !important;
+      opacity: 0.6;
+    }
+    circle animateMotion {
+      dur: 0s;
+    }
+  }
+</style>

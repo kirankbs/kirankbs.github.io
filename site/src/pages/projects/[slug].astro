@@ -12,38 +12,72 @@ const { Content } = await render(project);
 ---
 
 <BaseLayout title={`${project.data.title} | Kiran Kumar`} description={project.data.excerpt}>
-  <article class="min-h-screen bg-white dark:bg-slate-950">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <a href="/projects" class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 mb-8 font-medium">
-        &larr; Back to Projects
-      </a>
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
 
-      <header class="mb-8">
-        <div class="flex flex-wrap gap-2 mb-4">
-          {project.data.tags.map((tag) => (
-            <span class="text-xs px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full">{tag}</span>
-          ))}
-        </div>
-        <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">{project.data.title}</h1>
-        <div class="flex items-center space-x-4 text-slate-600 dark:text-slate-400">
-          <span>{project.data.date}</span>
+    <a
+      href="/projects"
+      class="arrow-link inline-flex items-center text-sm font-medium mb-10"
+      style={`font-family: var(--font-heading); color: var(--color-accent);`}
+    >
+      <span class="arrow" style="transform: rotate(180deg); margin-right: 0.5rem;">&rarr;</span>
+      Back to Projects
+    </a>
+
+    <header data-animate>
+      <!-- Project Metadata -->
+      <div
+        class="p-5 mb-8"
+        style={`border: 1px solid var(--color-border); border-radius: 0.5rem;`}
+      >
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div class="flex flex-wrap gap-2">
+            {project.data.tags.map((tag: string) => (
+              <span class="tag-editorial" style="color: var(--color-text-secondary);">{tag}</span>
+            ))}
+          </div>
+
+          <span
+            class="text-sm"
+            style={`font-family: var(--font-mono); color: var(--color-text-secondary);`}
+          >
+            {project.data.date}
+          </span>
+
           {project.data.githubUrl && (
-            <a href={project.data.githubUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center hover:text-cyan-600 dark:hover:text-cyan-400">
-              View on GitHub &rarr;
+            <a
+              href={project.data.githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="arrow-link text-sm font-medium ml-auto"
+              style={`font-family: var(--font-heading); color: var(--color-accent-secondary);`}
+            >
+              GitHub <span class="arrow">&rarr;</span>
             </a>
           )}
         </div>
-      </header>
-
-      <div class="prose prose-slate dark:prose-invert max-w-none">
-        <Content />
       </div>
 
-      <footer class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
-        <a href="/projects" class="inline-flex items-center text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-medium">
-          &larr; More Projects
-        </a>
-      </footer>
+      <h1
+        class="text-4xl sm:text-5xl font-extrabold mb-8"
+        style={`font-family: var(--font-heading); color: var(--color-text);`}
+      >
+        {project.data.title}
+      </h1>
+    </header>
+
+    <div class="prose max-w-none">
+      <Content />
     </div>
+
+    <footer class="mt-16 pt-8" style={`border-top: 1px solid var(--color-border);`}>
+      <a
+        href="/projects"
+        class="arrow-link inline-flex items-center text-sm font-medium"
+        style={`font-family: var(--font-heading); color: var(--color-accent);`}
+      >
+        <span class="arrow" style="transform: rotate(180deg); margin-right: 0.5rem;">&rarr;</span>
+        More Projects
+      </a>
+    </footer>
   </article>
 </BaseLayout>
