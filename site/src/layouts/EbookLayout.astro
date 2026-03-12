@@ -31,7 +31,6 @@ const {
 const allChapters = (await getCollection('ebook'))
   .sort((a, b) => a.data.chapter - b.data.chapter);
 
-const publishedChapters = allChapters.filter(c => c.data.status === 'published');
 const currentIndex = allChapters.findIndex(c => c.data.chapter === chapter);
 const prevChapter = currentIndex > 0 ? allChapters[currentIndex - 1] : null;
 const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentIndex + 1] : null;
@@ -40,8 +39,7 @@ const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentI
 <BaseLayout title={`${title} | eBook`} description={description}>
   <ReadingProgress />
 
-  <div style="min-height: 100vh; background-color: var(--color-bg);">
-    <div class="grid grid-cols-1 lg:grid-cols-[250px_1fr] max-w-6xl mx-auto">
+  <div class="grid grid-cols-1 lg:grid-cols-[250px_1fr] max-w-6xl mx-auto">
 
       <!-- Sidebar TOC (desktop) -->
       <aside
@@ -206,5 +204,4 @@ const nextChapter = currentIndex < allChapters.length - 1 ? allChapters[currentI
 
       </main>
     </div>
-  </div>
 </BaseLayout>
