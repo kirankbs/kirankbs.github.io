@@ -17,6 +17,10 @@ yarn-error.log*
 # IDE and editors
 .idea/
 .vscode/
+*.iml
+
+# Claude Code
+.claude/
 
 # System files
 .DS_Store
