@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookCover from '../../components/ebook/BookCover.astro';
 import { getCollection } from 'astro:content';
 import { ebookConfig } from '../../data/ebook';
 
@@ -32,34 +33,18 @@ const partProgress = ebookConfig.parts.map(part => {
 >
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
 
-      <!-- Title page -->
-      <header class="mb-20 text-center" data-animate>
-        <span
-          class="inline-block px-3 py-1 rounded-full text-xs font-medium mb-6"
-          style="background-color: color-mix(in srgb, var(--color-accent) 15%, transparent); color: var(--color-accent); font-family: var(--font-mono); letter-spacing: 0.05em;"
-        >
-          {ebookConfig.edition} &middot; {publishedCount} of {ebookConfig.totalChapters} chapters
-        </span>
-        <h1
-          class="text-5xl sm:text-6xl font-bold mb-4"
-          style="font-family: var(--font-heading); color: var(--color-text);"
-        >
-          {ebookConfig.title}
-        </h1>
+      <!-- Book Cover -->
+      <BookCover publishedCount={publishedCount} />
+
+      <!-- Description -->
+      <div class="text-center mb-16" data-animate>
         <p
-          class="text-xl sm:text-2xl mb-6"
-          style="font-family: var(--font-body); font-style: italic; color: var(--color-text-secondary);"
+          class="text-sm max-w-lg mx-auto leading-relaxed"
+          style="font-family: var(--font-body); color: var(--color-text-secondary);"
         >
-          {ebookConfig.subtitle}
+          {ebookConfig.description}
         </p>
-        <div class="rule-line w-24 mx-auto mb-6"></div>
-        <p
-          class="text-sm"
-          style="color: var(--color-text-secondary); font-family: var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase;"
-        >
-          by <span style="color: var(--color-text);">{ebookConfig.author}</span>
-        </p>
-      </header>
+      </div>
 
       <!-- Segmented progress bar -->
       <div class="mb-16" data-animate>
@@ -192,6 +177,9 @@ const partProgress = ebookConfig.parts.map(part => {
                         style="color: var(--color-text-secondary); font-family: var(--font-mono);"
                       >
                         {ch.data.estimatedReadTime}
+                        {ch.data.substackUrl && !ch.data.free && (
+                          <span style="color: var(--color-accent); margin-left: 0.5rem;">&#9679; Subscribers</span>
+                        )}
                       </span>
                     </a>
                   ) : (
@@ -218,6 +206,37 @@ const partProgress = ebookConfig.parts.map(part => {
             </div>
           </section>
         ))}
+      </div>
+
+      <!-- Newsletter CTA -->
+      <div
+        class="mt-20 p-8 rounded-xl text-center"
+        style="border: 1px solid var(--color-border); background: var(--color-surface);"
+        data-animate
+      >
+        <span class="section-label block mb-3">Stay Updated</span>
+        <h3
+          class="text-xl font-bold mb-2"
+          style="font-family: var(--font-heading); color: var(--color-text);"
+        >
+          New chapters delivered to your inbox
+        </h3>
+        <p
+          class="text-sm mb-5 max-w-md mx-auto"
+          style="font-family: var(--font-body); color: var(--color-text-secondary);"
+        >
+          Subscribe to get full chapters as they publish, plus production
+          war stories that don't make it into the book.
+        </p>
+        <a
+          href="https://newsletter.kirankbs.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all arrow-link"
+          style="font-family: var(--font-heading); background: var(--color-accent); color: var(--color-bg);"
+        >
+          Subscribe on Substack <span class="arrow">&rarr;</span>
+        </a>
       </div>
 
     </div>
