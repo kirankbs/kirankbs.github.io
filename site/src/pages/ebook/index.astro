@@ -19,11 +19,11 @@ const partChapters = ebookConfig.parts.map(part => ({
   chapters: chapters.filter(c => c.data.part === part.number),
 }));
 
-// Build progress per part
+// Build progress per part (with chapter refs for linking)
 const partProgress = ebookConfig.parts.map(part => {
   const partChs = chapters.filter(c => c.data.part === part.number);
   const pubCount = partChs.filter(c => c.data.status === 'published').length;
-  return { total: partChs.length, published: pubCount };
+  return { total: partChs.length, published: pubCount, chapters: partChs };
 });
 ---
 
@@ -57,11 +57,20 @@ const partProgress = ebookConfig.parts.map(part => {
         <div class="flex gap-1 w-full h-2 rounded-full overflow-hidden" style="background-color: var(--color-border-light);">
           {partProgress.map((pp) => (
             <div class="flex gap-0.5" style={`flex: ${pp.total}; display: flex;`}>
-              {Array.from({ length: pp.total }).map((_, i) => (
-                <div
-                  class="flex-1 rounded-sm"
-                  style={`background-color: ${i < pp.published ? 'var(--color-accent)' : 'var(--color-border)'};`}
-                />
+              {pp.chapters.map((ch, i) => (
+                ch.data.status === 'published' ? (
+                  <a
+                    href={`/ebook/${ch.slug}`}
+                    title={`Ch ${ch.data.chapter}: ${ch.data.title}`}
+                    class="flex-1 rounded-sm transition-opacity hover:opacity-75"
+                    style="background-color: var(--color-accent); cursor: pointer;"
+                  />
+                ) : (
+                  <div
+                    class="flex-1 rounded-sm"
+                    style="background-color: var(--color-border);"
+                  />
+                )
               ))}
             </div>
           ))}
