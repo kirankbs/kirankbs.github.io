@@ -1,0 +1,73 @@
+---
+import { siteConfig } from '../../site.config';
+
+interface Props {
+  variant: 'inline' | 'card';
+}
+
+const { variant } = Astro.props;
+const newsletterUrl = siteConfig.social.newsletter;
+---
+
+{variant === 'inline' ? (
+  <div
+    class="my-10 p-4 sm:p-5 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+    style="border: 1px solid var(--color-border); background: var(--color-surface);"
+  >
+    <p
+      class="text-sm sm:text-base"
+      style="font-family: var(--font-body); color: var(--color-text-secondary);"
+    >
+      Enjoyed this? I write about Spark, Delta Lake, and Databricks in production.
+    </p>
+    <a
+      href={newsletterUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-semibold transition-all arrow-link"
+      style="font-family: var(--font-heading); background: var(--color-accent); color: var(--color-bg);"
+    >
+      Subscribe <span class="arrow">&rarr;</span>
+    </a>
+  </div>
+) : (
+  <div
+    class="my-12 p-8 sm:p-10 rounded-xl text-center"
+    style="border: 1px solid var(--color-border); border-top: 2px solid var(--color-accent); background: var(--color-surface);"
+  >
+    <span class="section-label block mb-4" style="color: var(--color-accent);">
+      Newsletter
+    </span>
+
+    <h3
+      class="text-2xl font-bold mb-3"
+      style="font-family: var(--font-heading); color: var(--color-text);"
+    >
+      Stay in the loop
+    </h3>
+
+    <p
+      class="text-base mb-6 max-w-lg mx-auto"
+      style="font-family: var(--font-body); color: var(--color-text-secondary);"
+    >
+      I send one email when I publish. No spam, no fluff — production data engineering.
+    </p>
+
+    <a
+      href={newsletterUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold transition-all arrow-link"
+      style="font-family: var(--font-heading); background: var(--color-accent); color: var(--color-bg);"
+    >
+      Subscribe on Substack <span class="arrow">&rarr;</span>
+    </a>
+
+    <p
+      class="mt-4 text-xs"
+      style="color: var(--color-text-secondary); font-family: var(--font-mono);"
+    >
+      Free, unsubscribe anytime
+    </p>
+  </div>
+)}

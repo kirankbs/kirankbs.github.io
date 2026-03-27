@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ReadingProgress from '../../components/ReadingProgress.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { getCollection, render } from 'astro:content';
+import SubscribeCTA from '../../components/blog/SubscribeCTA.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -57,6 +58,8 @@ const related = allPosts
       <Content />
     </div>
 
+    <SubscribeCTA variant="inline" />
+
     <!-- Share area -->
     <div class="mt-12 pt-8 flex items-center gap-4" style={`border-top: 1px solid var(--color-border);`}>
       <span class="section-label">Share</span>
@@ -77,6 +80,8 @@ const related = allPosts
         </div>
       </section>
     )}
+
+    <SubscribeCTA variant="card" />
 
     <footer class="mt-12 pt-8" style={`border-top: 1px solid var(--color-border);`}>
       <a href="/blog" class="arrow-link" style="color: var(--color-accent);">
