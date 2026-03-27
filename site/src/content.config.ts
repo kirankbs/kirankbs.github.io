@@ -36,6 +36,8 @@ const ebook = defineCollection({
     blogPostRef: z.string().optional(),
     dataset: z.string().optional(),
     learningObjectives: z.array(z.string()).optional(),
+    substackUrl: z.string().url().optional(),
+    free: z.boolean().optional(),
   }),
 });
 

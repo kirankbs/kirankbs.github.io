@@ -2,6 +2,7 @@
 title: "Preface"
 chapter: 0
 status: "published"
+free: true
 excerpt: "Why this book exists and who it's for."
 estimatedReadTime: "4 min read"
 lastUpdated: "March 2026"

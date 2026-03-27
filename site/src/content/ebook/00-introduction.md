@@ -2,6 +2,7 @@
 title: "Introduction"
 chapter: 0
 status: "published"
+free: true
 excerpt: "The landscape has changed. AQE, Liquid Clustering, Predictive Optimization, and Serverless have automated much of what we used to do manually. This book focuses on what's left — the problems these features don't solve."
 estimatedReadTime: "6 min read"
 lastUpdated: "March 2026"
