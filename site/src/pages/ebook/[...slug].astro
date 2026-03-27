@@ -1,6 +1,7 @@
 ---
 import EbookLayout from '../../layouts/EbookLayout.astro';
 import SubscribeCTA from '../../components/ebook/SubscribeCTA.astro';
+import { siteConfig } from '../../site.config';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -58,5 +59,25 @@ const isGated = !isDraft && !isFree && !!chapter.data.substackUrl;
     />
   ) : (
     <Content />
+    <div
+      class="mt-12 p-6 sm:p-8 rounded-xl text-center"
+      style="border: 1px solid var(--color-border); border-top: 2px solid var(--color-accent); background: var(--color-surface);"
+    >
+      <p
+        class="text-base mb-5"
+        style="font-family: var(--font-body); color: var(--color-text-secondary);"
+      >
+        Enjoying the book? Subscribe to get notified when new chapters drop.
+      </p>
+      <a
+        href={siteConfig.social.newsletter}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-all arrow-link"
+        style="font-family: var(--font-heading); background: var(--color-accent); color: var(--color-bg);"
+      >
+        Subscribe <span class="arrow">&rarr;</span>
+      </a>
+    </div>
   )}
 </EbookLayout>
