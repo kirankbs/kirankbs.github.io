@@ -1,0 +1,80 @@
+---
+interface Props {
+  chapterTitle: string;
+  chapterNumber: number;
+  substackUrl: string;
+  learningObjectives?: string[];
+}
+
+const { chapterNumber, substackUrl, learningObjectives } = Astro.props;
+---
+
+<div class="relative -mt-24 pt-24 pointer-events-none" aria-hidden="true"
+  style="background: linear-gradient(to bottom, transparent, var(--color-bg) 80%);">
+</div>
+
+<div
+  class="my-12 p-8 sm:p-10 rounded-xl text-center"
+  style="border: 1px solid var(--color-border); background: var(--color-surface); box-shadow: 0 4px 24px -4px rgba(0,0,0,0.06);"
+>
+  <span class="section-label block mb-4" style="color: var(--color-accent);">
+    Continue Reading
+  </span>
+
+  <h3
+    class="text-2xl font-bold mb-3"
+    style="font-family: var(--font-heading); color: var(--color-text);"
+  >
+    Read the full chapter on Substack
+  </h3>
+
+  <p
+    class="text-base mb-6 max-w-lg mx-auto"
+    style="font-family: var(--font-body); color: var(--color-text-secondary);"
+  >
+    The rest of Chapter {chapterNumber} covers the complete implementation,
+    runnable examples, and diagnostic checklist. Free for subscribers.
+  </p>
+
+  {learningObjectives && learningObjectives.length > 0 && (
+    <div
+      class="mb-8 text-left max-w-md mx-auto p-5 rounded-lg"
+      style="background: color-mix(in srgb, var(--color-accent) 6%, transparent); border: 1px solid color-mix(in srgb, var(--color-accent) 15%, transparent);"
+    >
+      <span class="section-label block mb-3">In the full chapter</span>
+      <ul class="space-y-2">
+        {learningObjectives.map(obj => (
+          <li
+            class="flex items-start gap-2 text-sm"
+            style="font-family: var(--font-body); color: var(--color-text);"
+          >
+            <span class="mt-1 shrink-0" style="color: var(--color-accent);">&#x2192;</span>
+            <span>{obj}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <a
+    href={substackUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-base font-semibold transition-all arrow-link"
+    style="font-family: var(--font-heading); background: var(--color-accent); color: var(--color-bg);"
+  >
+    Read Full Chapter <span class="arrow">&rarr;</span>
+  </a>
+
+  <p
+    class="mt-4 text-xs"
+    style="color: var(--color-text-secondary); font-family: var(--font-mono);"
+  >
+    Free with a Substack subscription &middot;
+    <a
+      href="https://newsletter.kirankbs.com/"
+      class="hover-underline"
+      style="color: var(--color-accent-secondary);"
+    >newsletter.kirankbs.com</a>
+  </p>
+</div>
