@@ -58,8 +58,9 @@ export const timeline = [
 export const skills = [
   { category: 'Data Platform', items: ['Apache Spark', 'Spark Structured Streaming', 'Delta Lake', 'Databricks', 'Unity Catalog', 'Azure Data Lake', 'MLOps'] },
   { category: 'Streaming & Messaging', items: ['Apache Kafka', 'Kafka Connect', 'HiveMQ MQTT', 'Akka Streams'] },
-  { category: 'Cloud & Infrastructure', items: ['Azure', 'Azure Databricks', 'Azure Dashboards', 'Grafana'] },
+  { category: 'Observability', items: ['Grafana', 'Databricks Dashboards', 'Spark UI & Metrics', 'Cost & SLA Monitoring'] },
+  { category: 'Cloud & Infrastructure', items: ['Azure', 'Azure Databricks', 'Azure Data Explorer (ADX)'] },
   { category: 'Languages', items: ['Scala', 'Python', 'SQL'] },
-  { category: 'Databases', items: ['PostgreSQL', 'MongoDB', 'ElasticSearch', 'Azure Data Explorer (ADX)'] },
+  { category: 'Databases', items: ['PostgreSQL', 'MongoDB', 'ElasticSearch'] },
   { category: 'Architecture', items: ['Lakehouse', 'Medallion Architecture', 'IIoT', 'Data Governance'] },
 ];

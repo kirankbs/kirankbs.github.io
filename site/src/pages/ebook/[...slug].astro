@@ -1,5 +1,6 @@
 ---
 import EbookLayout from '../../layouts/EbookLayout.astro';
+import SubscribeCTA from '../../components/ebook/SubscribeCTA.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,7 +13,10 @@ export async function getStaticPaths() {
 
 const { chapter } = Astro.props;
 const { Content } = await render(chapter);
+
 const isDraft = chapter.data.status !== 'published';
+const isFree = chapter.data.free === true || chapter.data.chapter === 0;
+const isGated = !isDraft && !isFree && !!chapter.data.substackUrl;
 ---
 
 <EbookLayout
@@ -42,6 +46,16 @@ const isDraft = chapter.data.status !== 'published';
         Subscribe to the <a href="https://newsletter.kirankbs.com/" class="hover-underline" style="color: var(--color-accent-secondary);">newsletter</a> to get notified when new chapters drop.
       </p>
     </div>
+  ) : isGated ? (
+    <div class="prose prose-ebook max-w-none">
+      <Content />
+    </div>
+    <SubscribeCTA
+      chapterTitle={chapter.data.title}
+      chapterNumber={chapter.data.chapter}
+      substackUrl={chapter.data.substackUrl!}
+      learningObjectives={chapter.data.learningObjectives}
+    />
   ) : (
     <Content />
   )}
