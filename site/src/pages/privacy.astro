@@ -1,0 +1,78 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Privacy Policy | Korbly" description="Privacy policy for the Korbly grocery list app.">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+    <h1 class="text-3xl font-bold mb-2" style="font-family: var(--font-heading); color: var(--color-text);">
+      Privacy Policy
+    </h1>
+    <p class="text-sm mb-12" style="color: var(--color-text-secondary);">
+      Korbly &mdash; Effective March 29, 2025
+    </p>
+
+    <div class="space-y-10" style="color: var(--color-text-secondary); font-family: var(--font-body);">
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">What is Korbly</h2>
+        <p class="leading-relaxed">
+          Korbly is a collaborative grocery list app for Android. It lets you create and manage shopping lists,
+          share them with household members, and organise items by category.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">What data we collect</h2>
+        <ul class="space-y-2 leading-relaxed list-disc list-inside">
+          <li><strong style="color: var(--color-text);">Account:</strong> email address and a bcrypt-hashed password. We never store your password in plain text.</li>
+          <li><strong style="color: var(--color-text);">Grocery data:</strong> shopping lists, items, categories, and household membership that you create inside the app.</li>
+          <li><strong style="color: var(--color-text);">Session tokens:</strong> short-lived tokens stored on your device to keep you signed in.</li>
+        </ul>
+        <p class="mt-4 leading-relaxed">We do not collect analytics, advertising identifiers, location data, or device telemetry.</p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">Device permissions</h2>
+        <ul class="space-y-2 leading-relaxed list-disc list-inside">
+          <li><strong style="color: var(--color-text);">Photo library:</strong> used when you attach a receipt photo to a list. Access is requested only when you tap the receipt scanner and is not used otherwise.</li>
+          <li><strong style="color: var(--color-text);">Microphone:</strong> will be used for voice-based list input in a future release. The permission is declared in the app but not active yet.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">How data is stored</h2>
+        <p class="leading-relaxed">
+          All data is stored in a MongoDB database hosted on
+          <a href="https://render.com" class="underline" style="color: var(--color-accent);">Render</a>.
+          Data is transmitted over HTTPS. No data is stored on third-party analytics or advertising platforms.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">Data sharing</h2>
+        <p class="leading-relaxed">
+          We do not sell, rent, or share your personal data with any third parties. Grocery data you add to a
+          shared household is visible to other members of that household — that is the intended behaviour.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">Data deletion</h2>
+        <p class="leading-relaxed">
+          To delete your account and all associated data, contact us at the address below. We will process
+          deletion requests within 30 days.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold mb-3" style="color: var(--color-text);">Contact</h2>
+        <p class="leading-relaxed">
+          Questions or deletion requests:
+          <a href="https://github.com/kirankbs" class="underline" style="color: var(--color-accent);">github.com/kirankbs</a>
+        </p>
+      </section>
+
+    </div>
+  </div>
+</BaseLayout>
