@@ -91,6 +91,21 @@ DATABRICKS_RUN_ID={{run_id}}
 
 Not the run ID. The literal text `{{run_id}}`.
 
+The silence in the docs isn't accidental. `spark_env_vars` can't work here for a reason that has nothing to do with documentation gaps.
+
+`spark_env_vars` is baked into the cluster spec. It's set when the cluster starts — before the job run exists. `{{job.run_id}}` is assigned by the control plane when it *creates* the run, which is after the cluster is already up. The order:
+
+```
+1. Cluster allocated and started  →  spark_env_vars frozen here
+2. Job run created                →  {{job.run_id}} exists here
+3. Task dispatched                →  named_parameters resolved here
+4. Your code runs                 →  sys.argv has the values
+```
+
+The cluster boots without knowing its run ID. The control plane assigns one later, then hands it off via task parameters at dispatch time. By then env vars are already frozen in the process environment.
+
+`parameters`, `base_parameters`, and `named_parameters` work because they're wired in at step 3. `spark_env_vars` is step 1. No DAB config change gets around the sequencing.
+
 The Databricks docs don't say "dynamic value references don't work in spark_env_vars." They just don't list spark_env_vars as a supported location. The docs describe where they do work (task parameters, job parameters), but they never explicitly say where they don't. That silence is a trap for both humans and language models.
 
 ## The documentation problem
