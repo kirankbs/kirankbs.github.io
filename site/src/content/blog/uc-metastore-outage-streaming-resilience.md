@@ -26,8 +26,6 @@ Then within a 32-second window, all three fell over with the same error: `Analys
 
 Most people who run Databricks jobs don't think much about where the metadata calls go. I didn't, until this.
 
-![Databricks control plane vs data plane](/images/databricks-control-data-plane.png)
-
 Databricks runs as two separate planes. The **data plane** is your cloud account -the VMs, ADLS Gen2, your actual compute. The **control plane** is Databricks-hosted SaaS: Unity Catalog, the workspace API, credential vending, cluster orchestration.
 
 When a streaming job does a Delta write, it doesn't just push bytes to cloud storage. Before writing, it calls the control plane to resolve the table, get temporary ADLS credentials, and record metadata. These are gRPC calls from the driver VM to Databricks infrastructure, with a 5-second deadline.
