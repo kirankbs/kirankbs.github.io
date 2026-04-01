@@ -16,7 +16,7 @@ That last part is what made this worth writing up.
 
 ## What broke
 
-These are continuous streaming jobs using `foreachBatch` — each micro-batch runs some computation and writes results back to Delta. They'd been running for hours without a problem.
+These are continuous streaming jobs using `foreachBatch` -each micro-batch runs some computation and writes results back to Delta. They'd been running for hours without a problem.
 
 Then within a 32-second window, all three fell over with the same error: `AnalysisException: DEADLINE_EXCEEDED`. A 5-second gRPC deadline being exceeded on calls to the Unity Catalog control plane.
 
@@ -26,13 +26,13 @@ Then within a 32-second window, all three fell over with the same error: `Analys
 
 Most people who run Databricks jobs don't think much about where the metadata calls go. I didn't, until this.
 
-![Databricks control plane vs data plane](/images/databricks-control-data-plane.svg)
+![Databricks control plane vs data plane](/images/databricks-control-data-plane.png)
 
-Databricks runs as two separate planes. The **data plane** is your cloud account — the VMs, ADLS Gen2, your actual compute. The **control plane** is Databricks-hosted SaaS: Unity Catalog, the workspace API, credential vending, cluster orchestration.
+Databricks runs as two separate planes. The **data plane** is your cloud account -the VMs, ADLS Gen2, your actual compute. The **control plane** is Databricks-hosted SaaS: Unity Catalog, the workspace API, credential vending, cluster orchestration.
 
 When a streaming job does a Delta write, it doesn't just push bytes to cloud storage. Before writing, it calls the control plane to resolve the table, get temporary ADLS credentials, and record metadata. These are gRPC calls from the driver VM to Databricks infrastructure, with a 5-second deadline.
 
-If that control plane is degraded for even a few seconds while a `foreachBatch` is mid-execution, the call times out, the exception propagates up, and the streaming query dies. The data plane — the thing doing the actual work — was never the problem.
+If that control plane is degraded for even a few seconds while a `foreachBatch` is mid-execution, the call times out, the exception propagates up, and the streaming query dies. The data plane -the thing doing the actual work -was never the problem.
 
 This is the asymmetry that makes streaming jobs more fragile than batch jobs here. A batch job that runs for 10 minutes has a 10-minute window to hit a UC blip. A streaming job running all day generates fresh UC round-trips on every micro-batch, all day.
 
@@ -60,14 +60,14 @@ The timeline it returned:
 17:15:26.749  getSchema                        504  DEADLINE_EXCEEDED after 5000000000ns
 17:15:26.749  getSchema                        504  DEADLINE_EXCEEDED after 5000000000ns
 
-17:15:32  job 1 (door health monitor)   → runFailed
-17:15:47  job 2 (ride health tracker)   → runFailed
+17:15:32  job 1   → runFailed
+17:15:47  job 2   → runFailed
 17:15:53  generateTemporaryTableCredential  200   ← UC recovered
-17:15:58  job 3 (ingestion pipeline)    → runFailed
+17:15:58  job 3   → runFailed
 17:16:07  UC fully back to 200s
 ```
 
-The entire UC degradation: 27 seconds. Three 504s, all at the exact same millisecond. UC recovered at 17:15:53 but job 3 still failed at 17:15:58 — the error was already in flight.
+The entire UC degradation: 27 seconds. Three 504s, all at the exact same millisecond. UC recovered at 17:15:53 but job 3 still failed at 17:15:58 -the error was already in flight.
 
 The status page showed nothing. `system.access.audit` is the ground truth here. Brief workspace-level degradations don't meet the threshold for a published incident, but they record in the audit log regardless.
 
@@ -77,7 +77,7 @@ The status page showed nothing. `system.access.audit` is the ground truth here. 
 
 This is where my original assumption was wrong.
 
-I'd suspected the failures were from a `size_in_bytes()` logging call in our write utility — it calls `DeltaTable.forName().detail()` and I'd flagged it as an unnecessary UC round-trip. But the audit data showed the actual 504s were on `generateTemporaryPathCredential` and `getSchema`.
+I'd suspected the failures were from a `size_in_bytes()` logging call in our write utility -it calls `DeltaTable.forName().detail()` and I'd flagged it as an unnecessary UC round-trip. But the audit data showed the actual 504s were on `generateTemporaryPathCredential` and `getSchema`.
 
 `generateTemporaryPathCredential` is how streaming jobs get ADLS write credentials for checkpoint operations. It's not optional. The streaming engine calls it automatically. You can't gate it behind a log level check or skip it with a try/except.
 
@@ -91,7 +91,7 @@ Two things in our code were genuinely wasteful and worth fixing regardless.
 
 ### Removing size logging from the write path
 
-We had a shared `DeltaTableAppender` utility used by 30+ streaming jobs. Its `write()` method called `DeltaTable.forName().detail()` twice per batch — before and after the write — to log table size at INFO:
+We had a shared `DeltaTableAppender` utility used by 30+ streaming jobs. Its `write()` method called `DeltaTable.forName().detail()` twice per batch -before and after the write -to log table size at INFO:
 
 ```python
 # Before: two UC round-trips per batch, every batch, in production
@@ -123,7 +123,7 @@ else:
     size_after = -1
 ```
 
-At INFO (production default): zero extra UC calls per batch. At DEBUG (local dev or staging): telemetry comes back. We considered try/except — it still makes the network call and pays the 5-second deadline on failure. Gating on log level eliminates the call entirely.
+At INFO (production default): zero extra UC calls per batch. At DEBUG (local dev or staging): telemetry comes back. We considered try/except -it still makes the network call and pays the 5-second deadline on failure. Gating on log level eliminates the call entirely.
 
 One change in the shared utility, 30+ consumers protected without touching each one.
 
@@ -143,7 +143,7 @@ for win_start, win_end in windows:
     # ... aggregation and write
 ```
 
-Each `spark.table()` call triggers a `getSchema` + `tableExists` + `getTable` sequence. A 3-window batch hit UC 3 times just for table resolution before any actual data processing. This also accumulated JVM query plans across batches — the separate OOM issue we were already seeing after ~40 hours of runtime.
+Each `spark.table()` call triggers a `getSchema` + `tableExists` + `getTable` sequence. A 3-window batch hit UC 3 times just for table resolution before any actual data processing. This also accumulated JVM query plans across batches -the separate OOM issue we were already seeing after ~40 hours of runtime.
 
 The fix reads the full batch range once, caches it, and filters per-window from the cached DataFrame:
 
@@ -170,7 +170,7 @@ finally:
     all_events.unpersist()
 ```
 
-The `try/finally` matters. Skip it and the cached DataFrame sits in memory — you've traded a UC problem for a slow-burn memory leak.
+The `try/finally` matters. Skip it and the cached DataFrame sits in memory -you've traded a UC problem for a slow-burn memory leak.
 
 ---
 
@@ -200,7 +200,7 @@ A typical day of streaming jobs in this setup:
 | generateTemporaryTableCredential | 1,159 | per write |
 | generateTemporaryPathCredential | 761 | per checkpoint write |
 
-`getTable` at 9,458/day is the number worth tracking. After the per-window spark.table() fix, it should drop measurably — batches that previously did N lookups per window now do 1 per batch. That's a concrete before/after signal if you want to validate the change actually helped.
+`getTable` at 9,458/day is the number worth tracking. After the per-window spark.table() fix, it should drop measurably -batches that previously did N lookups per window now do 1 per batch. That's a concrete before/after signal if you want to validate the change actually helped.
 
 `metadataSnapshot` at 3,352 comes from Delta's internal file scan machinery. Nothing in application code changes that.
 
@@ -210,12 +210,12 @@ A typical day of streaming jobs in this setup:
 
 These changes reduce UC round-trips per batch. They don't make streaming jobs immune to control plane outages.
 
-`generateTemporaryPathCredential` — the call that actually killed these jobs — is still there. It has to be. Checkpoint writes need ADLS credentials. There's no application-level workaround.
+`generateTemporaryPathCredential` -the call that actually killed these jobs -is still there. It has to be. Checkpoint writes need ADLS credentials. There's no application-level workaround.
 
-Full protection would need retry-with-backoff inside the Spark/Delta machinery itself, which is a platform concern. The architectural alternative is `Trigger.AvailableNow` — run as managed batch with job-level retries instead of a perpetual streaming query. That trades latency for resilience, which isn't the right call for every workload.
+Full protection would need retry-with-backoff inside the Spark/Delta machinery itself, which is a platform concern. The architectural alternative is `Trigger.AvailableNow` -run as managed batch with job-level retries instead of a perpetual streaming query. That trades latency for resilience, which isn't the right call for every workload.
 
 So: we removed unnecessary overhead. Fewer calls in a degradation window means less exposure. That's the honest scope of it.
 
 ---
 
-The thing I keep coming back to: `spark.table()` inside a loop doesn't look wrong. It works fine under normal conditions for years. The failure modes only show up during a control plane blip (blast radius) or after 40+ hours of continuous runtime (JVM heap accumulation from accumulated query plans). Neither is obvious from reading the code. The audit log query is what makes it visible — and I wouldn't have thought to run it without the incident.
+The thing I keep coming back to: `spark.table()` inside a loop doesn't look wrong. It works fine under normal conditions for years. The failure modes only show up during a control plane blip (blast radius) or after 40+ hours of continuous runtime (JVM heap accumulation from accumulated query plans). Neither is obvious from reading the code. The audit log query is what makes it visible -and I wouldn't have thought to run it without the incident.
