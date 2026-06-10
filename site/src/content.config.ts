@@ -41,4 +41,20 @@ const ebook = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, ebook };
+const ai = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    excerpt: z.string(),
+    kind: z.enum(['essay', 'project', 'note', 'series']),
+    tags: z.array(z.string()),
+    readTime: z.string().optional(),
+    githubUrl: z.string().url().optional(),
+    seriesTitle: z.string().optional(),
+    part: z.number().optional(),
+    status: z.enum(['draft', 'published']).default('published'),
+  }),
+});
+
+export const collections = { blog, projects, ebook, ai };
