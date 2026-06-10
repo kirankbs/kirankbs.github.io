@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ReadingProgress from '../../components/ReadingProgress.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('ai')).filter((e: any) => e.data.status !== 'draft');
+  return entries.map(entry => ({ params: { slug: entry.slug }, props: { entry, allEntries: entries } }));
+}
+
+const { entry, allEntries } = Astro.props;
+const { Content } = await render(entry);
+
+const currentTags = new Set(entry.data.tags);
+const related = allEntries
+  .filter((p: any) => p.slug !== entry.slug && p.data.tags.some((t: string) => currentTags.has(t)))
+  .slice(0, 3);
+---
+
+<BaseLayout title={`${entry.data.title} | Kiran Kumar`} description={entry.data.excerpt}>
+  <ReadingProgress />
+
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <a href="/ai" class="arrow-link mb-8 inline-block" style="color: var(--color-accent);">
+      &larr; Back to AI
+    </a>
+
+    <header class="mb-10" data-animate>
+      <div class="flex flex-wrap gap-1 mb-4">
+        {entry.data.tags.map((tag: string, i: number) => (
+          <span>
+            <span class="tag-editorial">{tag}</span>
+            {i < entry.data.tags.length - 1 && <span class="tag-editorial mx-1">/</span>}
+          </span>
+        ))}
+      </div>
+
+      {entry.data.kind === 'series' && entry.data.seriesTitle && (
+        <p class="section-label mb-2">{entry.data.seriesTitle} &middot; Part {entry.data.part}</p>
+      )}
+
+      <h1 class="text-4xl sm:text-5xl font-extrabold mb-4" style={`font-family: var(--font-heading); color: var(--color-text);`}>
+        {entry.data.title}
+      </h1>
+
+      <div class="flex items-center gap-2" style="color: var(--color-text-secondary); font-family: var(--font-body);">
+        <span>{entry.data.date}</span>
+        {entry.data.readTime && <span>&mdash;</span>}
+        {entry.data.readTime && <span>{entry.data.readTime}</span>}
+      </div>
+
+      {entry.data.kind === 'project' && entry.data.githubUrl && (
+        <a href={entry.data.githubUrl} target="_blank" rel="noopener noreferrer" class="arrow-link mt-4 inline-block" style="color: var(--color-accent);">
+          View on GitHub &rarr;
+        </a>
+      )}
+
+      <div class="rule-line w-16 mt-6"></div>
+    </header>
+
+    <div class="prose prose-lg max-w-none" data-animate>
+      <Content />
+    </div>
+
+    {related.length > 0 && (
+      <section class="mt-16">
+        <div class="rule-line w-12 mb-4"></div>
+        <h2 class="section-label mb-8">Related</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" data-stagger>
+          {related.map(p => (
+            <BlogCard post={p} basePath="/ai" />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <footer class="mt-12 pt-8" style={`border-top: 1px solid var(--color-border);`}>
+      <a href="/ai" class="arrow-link" style="color: var(--color-accent);">
+        &larr; All AI
+      </a>
+    </footer>
+
+  </article>
+</BaseLayout>
