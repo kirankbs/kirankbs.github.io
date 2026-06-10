@@ -36,3 +36,6 @@ coverage/
 .cache/
 
 social
+
+# git worktrees
+.worktrees/
