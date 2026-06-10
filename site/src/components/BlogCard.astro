@@ -2,13 +2,14 @@
 interface Props {
   post: any;
   featured?: boolean;
+  basePath?: string;
 }
 
-const { post, featured = false } = Astro.props;
+const { post, featured = false, basePath = '/blog' } = Astro.props;
 ---
 
 {featured ? (
-  <a href={`/blog/${post.slug}`} class="group block card-hover border-b pb-8 mb-8" style={`border-color: var(--color-border);`}>
+  <a href={`${basePath}/${post.slug}`} class="group block card-hover border-b pb-8 mb-8" style={`border-color: var(--color-border);`}>
     <div class="grid md:grid-cols-[1fr_auto] gap-6">
       <div>
         <span class="tag-editorial">{post.data.date}</span>
@@ -33,7 +34,7 @@ const { post, featured = false } = Astro.props;
     </div>
   </a>
 ) : (
-  <a href={`/blog/${post.slug}`} class="group block card-hover rounded-lg p-6 border" style={`border-color: var(--color-border); background: var(--color-surface);`}>
+  <a href={`${basePath}/${post.slug}`} class="group block card-hover rounded-lg p-6 border" style={`border-color: var(--color-border); background: var(--color-surface);`}>
     <span class="tag-editorial">{post.data.date}</span>
     <h3 class="text-xl font-bold mt-2 mb-2 hover-underline inline-block" style={`font-family: var(--font-heading); color: var(--color-text);`}>
       {post.data.title}
