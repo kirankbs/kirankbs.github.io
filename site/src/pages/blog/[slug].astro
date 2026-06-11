@@ -54,6 +54,20 @@ const related = allPosts
       <div class="rule-line w-16 mt-6"></div>
     </header>
 
+    {post.data.heroImage && (
+      <figure class="mb-10 -mx-4 sm:mx-0" data-animate>
+        <img
+          src={post.data.heroImage}
+          alt={post.data.title}
+          width="1200"
+          height="630"
+          loading="eager"
+          class="w-full h-auto rounded-lg"
+          style={`border: 1px solid var(--color-border);`}
+        />
+      </figure>
+    )}
+
     <div class="prose prose-lg max-w-none" data-animate>
       <Content />
     </div>

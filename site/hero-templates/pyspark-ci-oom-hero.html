@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      font-family: 'Inter Tight', -apple-system, sans-serif;
+    }
+
+    .card {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      background: #0c0a09;
+      overflow: hidden;
+      padding: 72px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* amber glow, top-right */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -260px;
+      right: -200px;
+      width: 640px;
+      height: 640px;
+      background: radial-gradient(circle, rgba(217,119,6,0.22) 0%, rgba(217,119,6,0) 68%);
+      pointer-events: none;
+    }
+
+    /* dot texture */
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0);
+      background-size: 22px 22px;
+      pointer-events: none;
+    }
+
+    .top-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #d97706, #fbbf24, #0d9488);
+    }
+
+    .kicker {
+      position: relative;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #fbbf24;
+    }
+
+    .title {
+      position: relative;
+      font-weight: 800;
+      font-size: 82px;
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+      color: #fafaf9;
+      max-width: 1000px;
+    }
+    .title .accent { color: #fb923c; }
+
+    .snippet {
+      position: relative;
+      margin-top: 26px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 21px;
+      font-weight: 400;
+      color: #a8a29e;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .snippet .err { color: #f87171; }
+    .snippet .arrow { color: #57534e; }
+    .snippet .fix { color: #2dd4bf; }
+
+    .footer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .mark {
+      width: 46px; height: 46px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #d97706, #fbbf24);
+      color: #0c0a09;
+      font-weight: 900;
+      font-size: 21px;
+      letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+    .brand-name { color: #fafaf9; font-weight: 700; font-size: 22px; }
+    .brand-site { color: #78716c; font-weight: 500; font-size: 16px; font-family: 'JetBrains Mono', monospace; }
+
+    .read { color: #57534e; font-family: 'JetBrains Mono', monospace; font-size: 16px; letter-spacing: 0.05em; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-bar"></div>
+
+    <div class="kicker">PySpark &middot; Testing &middot; CI/CD</div>
+
+    <div>
+      <h1 class="title">Your Spark Tests Aren&rsquo;t Flaky.<br><span class="accent">They&rsquo;re Starving.</span></h1>
+      <div class="snippet">
+        <span class="err">ConnectionRefusedError</span>
+        <span class="arrow">&rarr;</span>
+        <span>real OOM</span>
+        <span class="arrow">&rarr;</span>
+        <span class="fix">a two-line fix</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="brand">
+        <div class="mark">KK</div>
+        <div class="brand-text">
+          <span class="brand-name">Kiran Kumar</span>
+          <span class="brand-site">kirankbs.com</span>
+        </div>
+      </div>
+      <div class="read">7 MIN READ</div>
+    </div>
+  </div>
+</body>
+</html>

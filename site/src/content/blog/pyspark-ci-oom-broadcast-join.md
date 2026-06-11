@@ -4,6 +4,7 @@ date: "June 10, 2026"
 readTime: "7 min read"
 excerpt: "A wall of ConnectionRefusedError in CI, one real OOM, and two lines that fixed it. Here's the debugging chain that led there."
 tags: ["PySpark", "Testing", "CI/CD", "Apache Spark"]
+heroImage: "/images/pyspark-ci-oom-hero.png"
 ---
 
 If you've ever stared at a CI log full of `ConnectionRefusedError` and `Not enough memory to build and broadcast the table`, only to run the same tests on your laptop and watch them pass — this post is for you.
